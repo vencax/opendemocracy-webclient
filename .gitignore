@@ -1,0 +1,9 @@
+npm-debug.log
+node_modules/
+build/
+./index.html
+*.min.js
+server.js
+vars.env
+.*
+js/main.js
