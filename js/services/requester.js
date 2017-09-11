@@ -1,8 +1,9 @@
 import axios from 'axios'
 import { convertQuery, getTotalItems } from './api_flavor'
+import DiscussRequesterInit from './discuss'
 
 class DataRequester {
-
+  //
   constructor (apiUrl, authHeaders, defaultHeaders) {
     this.apiUrl = apiUrl
     this.authHeaders = authHeaders
@@ -80,4 +81,4 @@ class DataRequester {
   }
 }
 
-export default DataRequester
+export default DiscussRequesterInit(DataRequester)

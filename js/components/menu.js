@@ -22,8 +22,7 @@ const AppMenu = ({store}) => {
   return (
     <Navbar fixedTop fluid collapseOnSelect inverse={false}>
       <Navbar.Header>
-        <Navbar.Brand className='cursor-pointer'
-          onClick={() => store.router.goTo(store.views.login, {}, store, {})}>
+        <Navbar.Brand className='cursor-pointer' onClick={() => store.goTo('dashboard')}>
           {Conf.siteName}
         </Navbar.Brand>
         <Navbar.Toggle />

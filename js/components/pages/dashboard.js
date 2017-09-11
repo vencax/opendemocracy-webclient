@@ -29,9 +29,16 @@ const DashboardPage = ({store, afterLogin}) => {
   ) : <span>loading</span>
 
   return (
-    <div className='row'>
-      <div className='col-xs-6'>
-        {content}
+    <div className='container'>
+      <div className='row'>
+        <div className='col-xs-6'>
+          <h3>Urgentni hlasovani</h3>
+          {content}
+        </div>
+        <div className='col-xs-6'>
+          <h3>Navrhy s dostatecnou podporou</h3>
+          {content}
+        </div>
       </div>
     </div>
   )

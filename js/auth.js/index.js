@@ -2,7 +2,6 @@ import { observable, computed, toJS, action, transaction, extendObservable, asMa
 import { RouterStore } from 'mobx-router'
 
 import DataRequester from '../services/requester'
-import AuthStoreInit from './auth'
 import CommentsStateInit from 'fb-similar-discussions/state'
 
 class BaseStore {
@@ -11,8 +10,9 @@ class BaseStore {
     this.commentPageSize = 2
     this.replyPageSize = 2
     // create requester
-    const getAuthHeaders = this.getAuthHeaders.bind(this)
-    this.requester = new DataRequester(Conf.apiUrl, getAuthHeaders, {})
+    this.requester = new DataRequester(Conf.apiUrl, () => {
+      return
+    }, {})
     // create router
     this.router = new RouterStore()
     this.views = views
@@ -24,6 +24,32 @@ class BaseStore {
   set cv(instance) {
     this.currentView = instance
   }
+
+  @action showLogin() {
+    this.cv = observable({
+      submitted: false,
+      error: false,
+      uname: '',
+      passw: ''
+    })
+  }
+
+  @action performLogin() {
+    this.cv.submitted = true
+    this.requester.call('/login', 'POST', {
+      username: this.cv.uname,
+      password: this.cv.passw
+    })
+    .then((res) => {
+      this.cv.submitted = false
+      this.loggedUser = observable(res.data.user)
+    })
+    .catch((err) => {
+      this.error = err
+      this.cv.submitted = false
+    })
+  }
+
   __ (str) {
     return str
   }
@@ -33,7 +59,6 @@ class BaseStore {
       discussions: []
     })
     this.loadDiscussions(this.cv, {entityname: 'proposals'})
-    .catch(this.onError.bind(this))
   }
 
   @action showProposal(id) {
@@ -42,7 +67,6 @@ class BaseStore {
       discussionid: id
     })
     this.loadDiscussion(this.cv, id, {entityname: 'proposals'})
-    .catch(this.onError.bind(this))
   }
 
   @action goToDetail(id) {
@@ -51,6 +75,10 @@ class BaseStore {
 
   @action goTo(viewname) {
     this.router.goTo(this.views[viewname], {}, this)
+  }
+
+  getLoggedUserId() {
+    return 3
   }
 
   messages = observable.shallowMap({})
@@ -72,12 +100,6 @@ class BaseStore {
     this.messages.delete(message.text)
   }
 
-  onError(err) {
-    if (err.response.status === 401) {
-      this.goTo('login')
-    }
-  }
-
 }
 
-export default CommentsStateInit(AuthStoreInit(BaseStore))
+export default CommentsStateInit(BaseStore)

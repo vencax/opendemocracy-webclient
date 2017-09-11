@@ -4,19 +4,31 @@ import { observer, inject } from 'mobx-react'
 
 const LoginView = ({store, afterLogin}) => {
   //
-  function handleSubmit () {
-    store.submitted = true
-    return store.performLogin(toJS(store.credentials))
-    .then((user) => {
-      afterLogin()
-    })
-    .catch(() => {
-      store.submitted = false
-    })
+  function handleSubmit (evt) {
+    evt.stopPropagation()
+    return store.performLogin()
   }
 
   return (
-    <button onClick={() => handleSubmit()}>login</button>
+    <div className='container'>
+      <div className='row'>
+        <div className='col-sm-12 col-md-6'>
+          <form>
+            <div className='form-group'>
+              <label for='iUname'>username</label>
+              <input type='email' className='form-control' id='iUname' placeholder='username' />
+            </div>
+            <div className='form-group'>
+              <label for='iPassword'>Password</label>
+              <input type='password' className='form-control' id='iPassword' placeholder='password' />
+            </div>
+            <button type='submit' className='btn btn-default'
+              disabled={store.cv.submitted}
+              onClick={handleSubmit}>login</button>
+          </form>
+        </div>
+      </div>
+    </div>
   )
 }
 LoginView.propTypes = {
