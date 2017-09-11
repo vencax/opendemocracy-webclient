@@ -27,8 +27,8 @@ class AuthStore {
     this.cv = observable({
       submitted: false,
       error: false,
-      uname: '',
-      passw: ''
+      username: '',
+      password: ''
     })
   }
 
@@ -37,11 +37,17 @@ class AuthStore {
     this.token = null
   }
 
+  @action handleLoginFormChange(attr, val) {
+    this.cv[attr] = val
+  }
+
   @action performLogin() {
     this.cv.submitted = true
     this.requester.call('/login', 'POST', {
-      username: this.cv.uname,
-      password: this.cv.passw
+      username: this.cv.username,
+      password: this.cv.password,
+      email: `${this.cv.username}@test.mordor`,
+      id: 123
     })
     .then((res) => {
       this.cv.submitted = false
