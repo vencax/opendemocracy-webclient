@@ -2,12 +2,12 @@ import { observable, computed, toJS, action, transaction, extendObservable, asMa
 import { RouterStore } from 'mobx-router'
 
 import DataRequester from '../services/requester'
-import AuthStoreInit from './auth'
-import CommentsStateInit from 'fb-similar-discussions/state'
+import AuthStore from './auth'
 
-class BaseStore {
+class AppStore extends AuthStore {
 
   constructor (views) {
+    super()
     this.commentPageSize = 2
     this.replyPageSize = 2
     // create requester
@@ -80,4 +80,4 @@ class BaseStore {
 
 }
 
-export default CommentsStateInit(AuthStoreInit(BaseStore))
+export default AppStore
