@@ -31,11 +31,12 @@ class DataRequester {
     })
   }
 
-  getEntry (entityName, id, options = {}) {
+  getEntry (entityName, id, params = {}) {
     return axios({
       method: 'get',
       url: `${this.apiUrl}/${entityName}/${id}`,
-      headers: this.authHeaders()
+      headers: this.authHeaders(),
+      params: params
     }).then((response) => {
       return response.data
     })

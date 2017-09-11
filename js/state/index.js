@@ -2,9 +2,9 @@ import { observable, computed, toJS, action, extendObservable } from 'mobx'
 import { RouterStore } from 'mobx-router'
 
 import DataRequester from '../services/requester'
-import AuthStore from './auth'
+import ProposalStore from './proposal'
 
-class AppStore extends AuthStore {
+class AppStore extends ProposalStore {
 
   constructor (views) {
     super()
@@ -36,41 +36,6 @@ class AppStore extends AuthStore {
     .catch(this.onError.bind(this))
   }
 
-  @action showProposal(id) {
-    this.cv = observable({
-      discussion: null,
-      discussionid: id
-    })
-    this.loadDiscussion(this.cv, id, {entityname: 'proposals'})
-    .catch(this.onError.bind(this))
-  }
-
-  @action editProposal(id) {
-    const adding = id === '_new'
-    this.cv = observable({
-      loading: adding ? false : true,
-      record: adding ? {
-        title: '',
-        content: ''
-      } : null,
-      errors: observable.map({})
-    })
-  }
-
-  @action handleProposalFormChange(attr, val) {
-    this.cv.record[attr] = val
-  }
-
-  @action saveProposal() {
-    this.cv.loading = true
-    this.requester.saveEntry('proposals', this.cv.record, this.cv.record.id)
-    .then((data) => {
-      this.addMessage('saved')
-      this.cv.loading = false
-    })
-    .catch(this.onError.bind(this))
-  }
-
   @action goToDetail(id) {
     this.router.goTo(this.views.proposal, {id}, this)
   }
@@ -99,7 +64,7 @@ class AppStore extends AuthStore {
   }
 
   onError(err) {
-    if (err.response.status === 401) {
+    if (err.response && err.response.status === 401) {
       this.goTo('login')
     }
   }
