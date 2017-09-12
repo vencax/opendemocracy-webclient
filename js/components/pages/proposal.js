@@ -3,20 +3,31 @@ import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import Discussion from 'fb-like-discussions/components/discussion'
 
-const DiscussionView = ({store}) => {
-  const dis = store.cv.discussion
+const DefaultGravatar = ({user}) => (
+  <img src='http://www.imran.com/xyper_images/icon-user-default.png' />
+)
 
-  return dis === null ? <span>loading</span> : (
+const DefaultHeading = ({record}) => (
+  <span>{record.author} <span>{record.created}</span></span>
+)
+
+const DiscussionView = ({store}) => {
+  const proposal = store.cv.proposal
+
+  return proposal === null ? <span>loading</span> : (
     <div className='discussion'>
-      <h1>{dis.title}</h1>
-      <p dangerouslySetInnerHTML={{__html: dis.content}} />
+      <h1>{proposal.title}</h1>
+      <p dangerouslySetInnerHTML={{__html: proposal.content}} />
       <hr />
-      <Discussion discussion={dis} store={store}
-        onLoadComments={(page = 1) => store.loadComments(store.cv, dis, page)}
-        showCommentForm={(show) => store.composeComment(dis, show)}
-        onCommentChange={(newVal) => store.updateComment(dis, newVal)}
-        onSendComment={() => store.sendComment(dis)}
+      <Discussion discussion={proposal} state={store}
+        onLoadComments={(page) => {
+          store.goTo('proposal', store.router.params, {_page: page})
+        }}
+        showCommentForm={(show) => store.composeComment(proposal, show)}
+        onCommentChange={(newVal) => store.updateComment(proposal, newVal)}
+        onSendComment={() => store.sendComment(proposal)}
         onLoadReplies={(comment, page = 1) => store.loadReplies(store.cv, comment, page)}
+        Gravatar={DefaultGravatar} Heading={DefaultHeading}
       />
     </div>
   )

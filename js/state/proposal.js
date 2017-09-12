@@ -3,12 +3,19 @@ import AuthStore from './auth'
 
 class ProposalStore extends AuthStore {
 
-  @action showProposal(id) {
+  @action showProposal(id, page = 1) {
     this.cv = observable({
-      discussion: null,
+      proposal: null,
       discussionid: id
     })
-    this.loadDiscussion(this.cv, id, {entityname: 'proposals'})
+
+    this.requester.getEntry('proposals', id)
+    .then(action('onProposalLoaded', (proposal) => {
+      proposal.comments = []
+      proposal.comment = null
+      this.cv.proposal = proposal
+      return this.loadComments(this.cv, this.cv.proposal, page, 2)
+    }))
     .catch(this.onError.bind(this))
   }
 

@@ -37,11 +37,11 @@ class AppStore extends ProposalStore {
   }
 
   @action goToDetail(id) {
-    this.router.goTo(this.views.proposal, {id}, this)
+    this.router.goTo(this.views.proposal, {id}, this, {_page: 1})
   }
 
-  @action goTo(viewname, params={}) {
-    this.router.goTo(this.views[viewname], params, this)
+  @action goTo(viewname, params={}, query = {}) {
+    this.router.goTo(this.views[viewname], params, this, query)
   }
 
   messages = observable.shallowMap({})

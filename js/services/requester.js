@@ -12,13 +12,13 @@ class DataRequester {
     }
   }
 
-  getEntries (entityName, params) {
+  getEntries (url, params) {
     //
     let qParams = convertQuery(params)
 
     const req = axios({
       method: 'get',
-      url: `${this.apiUrl}/${entityName}`,
+      url: `${this.apiUrl}/${url}`,
       params: qParams,
       headers: this.authHeaders()
     })

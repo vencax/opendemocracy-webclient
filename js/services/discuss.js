@@ -14,16 +14,14 @@ export default (BaseClass) => class DiscussRequester extends BaseClass {
   }
 
   getComments (discussionID, opts) {
-    return this.getEntries('comments', Object.assign({
-      filters: {parent: discussionID}
-    }, opts))
+    const url = `comments/${discussionID}`
+    return this.getEntries(url, opts)
   }
 
   postComment (discussion) {
     return this.saveEntry('comments', {
       parent: discussion.id,
-      author: this.getLoggedUserId(),
-      body: discussion.comment
+      content: discussion.comment
     })
   }
 
@@ -34,22 +32,15 @@ export default (BaseClass) => class DiscussRequester extends BaseClass {
   }
 
   postReply (comment) {
-    return this.saveEntry('replies', {
-      commentid: comment.id,
-      author: this.getLoggedUserId(),
-      body: comment.reply
+    const url = `/comments/${comment.id}/replies`
+    return this.call(url, 'post', {
+      content: comment.reply
     })
   }
 
-  getFeedback (comment) {
-    return this.getEntries('commentfeedbacks', {
-      filters: {
-        commentid: comment.id,
-        uid: this.getLoggedUserId()
-      },
-      page: 1,
-      perPage: 1
-    })
+  getFeedback (comment, uid) {
+    const url = `/comments/${comment.id}/feedbacks`
+    return this.call(url)
   }
 
   deleteCommentFeedback (comment) {
