@@ -14,7 +14,7 @@ const DefaultHeading = ({record}) => (
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
 
-  return proposal === null ? <span>loading</span> : (
+  const content = proposal === null ? <span>loading</span> : (
     <div className='discussion'>
       <h1>{proposal.title}</h1>
       <p dangerouslySetInnerHTML={{__html: proposal.content}} />
@@ -29,6 +29,15 @@ const DiscussionView = ({store}) => {
         onLoadReplies={(comment, page = 1) => store.loadReplies(store.cv, comment, page)}
         Gravatar={DefaultGravatar} Heading={DefaultHeading}
       />
+    </div>
+  )
+  return (
+    <div className='container'>
+      <div className='row'>
+        <div className='col-xs-12'>
+          {content}
+        </div>
+      </div>
     </div>
   )
 }
