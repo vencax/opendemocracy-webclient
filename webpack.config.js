@@ -26,7 +26,7 @@ module.exports = (env = {
       loaders: [
         {
           test: /\.js$/,
-          exclude: /node_modules(?!(\\|\/)react-mobx-admin|(\\|\/)fb-similar-discussions|(\\|\/)mobx-router)/,
+          exclude: /node_modules(?!(\\|\/)react-mobx-admin|(\\|\/)fb-like-discussions|(\\|\/)mobx-router)/,
           loader: 'babel-loader'
         }
       ]

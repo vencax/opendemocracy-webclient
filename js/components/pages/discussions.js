@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer } from 'mobx-react'
-import Discussion from 'fb-similar-discussions/components/discussion'
+import Discussion from 'fb-like-discussions/components/discussion'
 
 const DiscussionsView = ({ state }) => (
   state.currentView.discussions.length ? (

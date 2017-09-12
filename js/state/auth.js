@@ -1,5 +1,5 @@
 import { observable, computed, toJS, action, transaction, extendObservable, asMap } from 'mobx'
-import CommentsStateInit from 'fb-similar-discussions/state'
+import CommentsStateInit from 'fb-like-discussions/state'
 
 const LSTORAGE_USER_KEY = 'opendemocracy_user'
 const LSTORAGE_TOKEN_KEY = 'opendemocracy_user'
