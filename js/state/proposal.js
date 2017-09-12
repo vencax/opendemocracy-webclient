@@ -19,8 +19,8 @@ class ProposalStore extends AuthStore {
       record: adding ? {
         title: '',
         content: '',
-        options: [],
       } : null,
+      options: [],
       optionerrors: observable.map({}),
       errors: observable.map({}),
       editedOption: null
@@ -32,29 +32,43 @@ class ProposalStore extends AuthStore {
     }
   }
 
-  @action addOption() {
-    this.cv.editedOption = {
-      title: '',
-      content: ''
-    }
-  }
-
   @action onOptionAttrChange(attr, val) {
     this.cv.editedOption[attr] = val
   }
 
   @action editOption(opt) {
-    this.cv.editedOption = Object.assign({}, opt)
+    this.cv.editedOption = opt ? Object.assign({}, opt) : {
+      title: '',
+      content: ''
+    }
+  }
+
+  @action removeOption(opt) {
+    this.requester.call(`/proposals/${this.cv.record.id}/options/${opt.id}`, 'delete')
+    .then((data) => {
+      const idx = this.cv.options.indexOf(opt)
+      this.cv.options.splice(idx, 1)
+    })
+    .catch(this.onError.bind(this))
   }
 
   @action saveOption() {
-    if (this.cv.editedOption.id) {
-      const existing = this.cv.record.options.find((i) => i.id === this.cv.editedOption.id)
-      Object.assign(existing, this.cv.editedOption)
-    } else {
-      this.cv.record.options.push(this.cv.editedOption)
-    }
-    this.cv.editedOption = null
+    const id = this.cv.editedOption.id
+    const url = id
+      ? `/proposals/${this.cv.record.id}/options/${this.cv.editedOption.id}`
+      : `/proposals/${this.cv.record.id}/options`
+    const method = id ? 'put' : 'post'
+    this.requester.call(url, method, this.cv.editedOption)
+    .then((res) => {
+      if (id) {
+        const existing = this.cv.options.find((i) => i.id === id)
+        Object.assign(existing, res.data[0])
+      } else {
+        this.cv.options.push(res.data)
+      }
+      this.cv.editedOption = null
+    })
+    .catch(this.onError.bind(this))
   }
 
   @action cancelEditOption() {
@@ -63,6 +77,8 @@ class ProposalStore extends AuthStore {
 
   @action onProposalLoaded(proposal) {
     this.cv.loading = false
+    this.cv.options = proposal.options
+    delete proposal.options
     this.cv.record = proposal
   }
 

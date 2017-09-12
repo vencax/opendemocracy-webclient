@@ -65,8 +65,9 @@ class AppStore extends ProposalStore {
 
   onError(err) {
     if (err.response && err.response.status === 401) {
-      this.goTo('login')
+      return this.goTo('login')
     }
+    throw err
   }
 
 }

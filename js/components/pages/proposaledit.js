@@ -72,14 +72,16 @@ const ProposalEditView = ({store}) => {
           handleChange={store.handleProposalFormChange.bind(store)} />
         <div className='col-sm-12 col-md-6'>
           <h5>options</h5>
-          <Button onClick={store.addOption.bind(store)}>add</Button>
+          <Button onClick={store.editOption.bind(store, null)}>add</Button>
           {
-            rec.options && rec.options.length > 0 ? (
+            store.cv.options.length > 0 ? (
               <ul>
                 {
-                  rec.options.map((i) => (
+                  store.cv.options.map((i) => (
                     <div>
                       <h3>{i.title}</h3>
+                      <Button onClick={store.removeOption.bind(store, i)}>rem</Button>
+                      <Button onClick={store.editOption.bind(store, i)}>edit</Button>
                       <p>{i.content}</p>
                     </div>
                   ))
