@@ -44,14 +44,12 @@ export default (BaseClass) => class DiscussRequester extends BaseClass {
   }
 
   deleteCommentFeedback (comment) {
-    return this.deleteEntry('commentfeedbacks', comment.feedback.id)
+    return this.call(`/comments/${comment.id}/feedbacks`, 'delete')
   }
 
   postCommentFeedback (comment, feedback) {
-    return this.saveEntry('commentfeedbacks', {
-      feedback,
-      commentid: comment.id,
-      uid: this.getLoggedUserId()
+    return this.saveEntry(`comments/${comment.id}/feedbacks`, {
+      value: feedback
     })
   }
 }
