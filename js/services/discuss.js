@@ -26,15 +26,15 @@ export default (BaseClass) => class DiscussRequester extends BaseClass {
   }
 
   getReplies (commentID, opts) {
-    return this.getEntries('replies', Object.assign({
-      filters: {commentid: commentID}
-    }, opts))
+    return this.getEntries(`comments/${commentID}/replies`, {}, opts)
   }
 
   postReply (comment) {
     const url = `/comments/${comment.id}/replies`
     return this.call(url, 'post', {
       content: comment.reply
+    }).then(res => {
+      return res.data
     })
   }
 

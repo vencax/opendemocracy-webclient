@@ -8,7 +8,7 @@ const DefaultGravatar = ({user}) => (
 )
 
 const DefaultHeading = ({record}) => (
-  <span>{record.author} <span>{record.created}</span></span>
+  <span>{record.uid} <span>{record.created}</span></span>
 )
 
 const DiscussionView = ({store}) => {
@@ -18,6 +18,7 @@ const DiscussionView = ({store}) => {
     <div className='discussion'>
       <h1>{proposal.title}</h1>
       <p dangerouslySetInnerHTML={{__html: proposal.content}} />
+      <p>comments: {proposal.comment_count}</p>
       <hr />
       <Discussion discussion={proposal} state={store}
         onLoadComments={(page) => {
