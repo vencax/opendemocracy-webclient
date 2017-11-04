@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 
-const DiscussionDetail = ({discussion, detailClicked, ...rest}) => (
+const DiscussionDetail = ({discussion, detailClicked, editButton, ...rest}) => (
   <div {...rest}>
     <h4>{discussion.title}</h4>
     <p>
@@ -10,6 +10,7 @@ const DiscussionDetail = ({discussion, detailClicked, ...rest}) => (
     </p>
     <p dangerouslySetInnerHTML={{__html: discussion.content}} />
     <button className='btn btn-sm' onClick={detailClicked}>detail</button>
+    { editButton }
   </div>
 )
 
@@ -22,7 +23,11 @@ const DashboardPage = ({store, afterLogin}) => {
           function _detailClicked () {
             store.goToDetail(dis.id)
           }
-          return <DiscussionDetail discussion={dis} detailClicked={_detailClicked} idx={idx} />
+          const editButton = (store.loggedUser && dis.uid === store.loggedUser.id) ? (
+            <button className='btn btn-sm' onClick={() => store.goTo('proposaledit', {id: dis.id})}>edit</button>
+          ) : null
+          return <DiscussionDetail discussion={dis} detailClicked={_detailClicked}
+            idx={idx} editButton={editButton} />
         })
       }
     </ul>
