@@ -1,20 +1,14 @@
 import { observable, computed, toJS, action, transaction, extendObservable, asMap } from 'mobx'
 import CommentsStateInit from 'fb-like-discussions/state'
-
-const LSTORAGE_USER_KEY = 'opendemocracy_user'
-const LSTORAGE_TOKEN_KEY = 'opendemocracy_token'
+import AuthService from '../services/auth'
 
 class AuthStore {
 
   constructor() {
-    const user = localStorage.getItem(LSTORAGE_USER_KEY)
-    const token = localStorage.getItem(LSTORAGE_TOKEN_KEY)
-    try {
-      this.loggedUser = JSON.parse(user)
-      this.token = JSON.parse(token)
-    } catch(e) {
-      console.log(e)
-    }
+    this.authService = new AuthService()
+    const uinfo = this.authService.getInfo()
+    this.loggedUser = uinfo ? uinfo.user: null
+    this.token = uinfo ? uinfo.token: null
   }
 
   getAuthHeaders() {
@@ -35,6 +29,7 @@ class AuthStore {
   @action logout() {
     this.loggedUser = null
     this.token = null
+    this.authService.logout()
     this.goTo('login')
   }
 
@@ -44,18 +39,11 @@ class AuthStore {
 
   @action performLogin() {
     this.cv.submitted = true
-    this.requester.call('/login', 'POST', {
-      username: this.cv.username,
-      password: this.cv.password,
-      email: `${this.cv.username}@test.mordor`,
-      id: 123
-    })
+    this.authService.login(this.cv, this.requester)
     .then((res) => {
       this.cv.submitted = false
-      this.loggedUser = observable(res.data.user)
-      localStorage.setItem(LSTORAGE_USER_KEY, JSON.stringify(res.data.user))
-      this.token = res.data.token
-      localStorage.setItem(LSTORAGE_TOKEN_KEY, JSON.stringify(res.data.token))
+      this.loggedUser = observable(res.user)
+      this.token = res.token
       this.goTo('dashboard')
     })
     .catch((err) => {
