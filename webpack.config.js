@@ -19,6 +19,17 @@ module.exports = (env = {
   dev: true
 }) => {
   const {ifProd} = getIfUtils(env)
+  const babelOptions = {
+    presets: ['react', ['es2015', {'modules': false}]],
+    plugins: [
+      'transform-object-rest-spread',
+      'transform-decorators-legacy',
+      'transform-class-properties'
+    ]
+  }
+  if (!env.dev) {
+    babelOptions.plugins.push('transform-react-remove-prop-types')
+  }
   const config = {
     devtool: ifProd('hidden-source-map', 'inline-source-map'),
     entry: path.resolve('./js/main.js'),
@@ -27,7 +38,8 @@ module.exports = (env = {
         {
           test: /\.js$/,
           exclude: /node_modules(?!(\\|\/)react-mobx-admin|(\\|\/)fb-like-discussions|(\\|\/)mobx-router)/,
-          loader: 'babel-loader'
+          loader: 'babel-loader',
+          options: babelOptions
         }
       ]
     },
