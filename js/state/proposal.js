@@ -96,10 +96,14 @@ class ProposalStore extends AuthStore {
   @action saveProposal() {
     this.cv.loading = true
     this.requester.saveEntry('proposals', this.cv.record, this.cv.record.id)
-    .then((data) => {
+    .then(action('onProposalSaved', (data) => {
+      if (!this.cv.record.id) { // move to edit view if created new one
+        this.router.params.id = data.id
+      }
+      extendObservable(this.cv.record, data)
       this.addMessage('saved')
       this.cv.loading = false
-    })
+    }))
     .catch(this.onError.bind(this))
   }
 
