@@ -107,6 +107,14 @@ class ProposalStore extends AuthStore {
     .catch(this.onError.bind(this))
   }
 
+  @action publishProposal() {
+    this.requester.call(`/proposals/${this.cv.record.id}/publish`, 'put')
+    .then((res) => {
+      this.goTo('dashboard')
+    })
+    .catch(this.onError.bind(this))
+  }
+
 }
 
 export default ProposalStore

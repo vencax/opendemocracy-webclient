@@ -112,6 +112,7 @@ const ProposalEditView = ({store}) => {
       </div>
       <hr />
       <Button onClick={store.saveProposal.bind(store)}>save</Button>
+      { rec.id && <Button onClick={store.publishProposal.bind(store)}>publish</Button> }
     </div>
   )
 }
