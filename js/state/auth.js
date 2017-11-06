@@ -17,6 +17,21 @@ class AuthStore {
     } : {}
   }
 
+  @observable userinfos = new Map()
+
+  @action loadUserInfo(uid) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        const uinfo = {
+          uid, fullname: `fullname ${uid}`,
+          img: 'http://78.media.tumblr.com/avatar_be72aa31ff1f_128.png'
+        }
+        this.userinfos.set(uid, uinfo)
+        resolve(uinfo)
+      })
+    })
+  }
+
   @action showLogin() {
     this.cv = observable({
       submitted: false,

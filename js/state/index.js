@@ -30,10 +30,26 @@ class AppStore extends ProposalStore {
 
   @action showDashboard() {
     this.cv = observable({
-      discussions: []
+      myproposals: null,
+      justsupported: null,
+      ready4voting: null
     })
-    this.loadDiscussions(this.cv, {entityname: 'proposals'})
+    this.requester.call(`/proposals?uid=${this.loggedUser.id}&status=draft`)
+    .then((res) => {
+      res.data.map((i) => this.loadUserInfo(i.uid)) // load userinfos
+      this.cv.myproposals = res.data
+    })
     .catch(this.onError.bind(this))
+
+    this.requester.call(`/proposals?status=voting`)
+    .then((res) => {
+      res.data.map((i) => this.loadUserInfo(i.uid)) // load userinfos
+      this.cv.ready4voting = res.data
+    })
+    .catch(this.onError.bind(this))
+
+    // this.requester.call(`/proposals?uid=${this.loggedUser.id}&status=draft`)
+
   }
 
   @action goToDetail(id) {
