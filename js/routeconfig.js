@@ -5,6 +5,7 @@ import DashboardPage from './components/pages/dashboard'
 import LoginPage from './components/pages/login'
 import ProposalPage from './components/pages/proposal'
 import ProposalEditPage from './components/pages/proposaledit'
+import ProposalListPage from './components/pages/proposallist'
 
 const views = {
   dashboard: new Route({
@@ -31,6 +32,11 @@ const views = {
     path: '/proposaledit/:id',
     component: <ProposalEditPage />,
     onEnter: (route, params, store) => store.editProposal(params.id)
+  }),
+  proposallist: new Route({
+    path: '/proposallist',
+    component: <ProposalListPage />,
+    onEnter: (route, params, store, queryParams) => store.showProposalList(queryParams)
   })
 }
 export default views

@@ -1,3 +1,4 @@
+/* global Conf */
 import React from 'react'
 import {observer} from 'mobx-react'
 import {Navbar, Nav, NavItem} from 'react-bootstrap'
@@ -13,7 +14,7 @@ const AppMenu = ({store}) => {
     <Nav>
       <NavItem eventKey={1}
         active={isActive('proposals')}
-        onClick={() => store.goTo('proposals')}>
+        onClick={() => store.goTo('proposallist')}>
         {store.__('proposals')}
       </NavItem>
       <NavItem eventKey={2}

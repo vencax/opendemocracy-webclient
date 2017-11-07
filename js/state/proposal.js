@@ -3,6 +3,18 @@ import AuthStore from './auth'
 
 class ProposalStore extends AuthStore {
 
+  @action showProposalList(params) {
+    this.cv = observable({
+      proposals: null
+    })
+    this.requester.call(`/proposals`)
+    .then((res) => {
+      res.data.map((i) => this.loadUserInfo(i.uid)) // load userinfos
+      this.cv.proposals = res.data
+    })
+    .catch(this.onError.bind(this))
+  }
+
   @action showProposal(id, page = 1) {
     this.cv = observable({
       proposal: null,
