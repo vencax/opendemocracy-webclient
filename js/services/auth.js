@@ -18,8 +18,8 @@ export default class AuthService {
   }
 
   logout () {
-    localStorage.deleteItem(LSTORAGE_USER_KEY)
-    localStorage.deleteItem(LSTORAGE_TOKEN_KEY)
+    localStorage.removeItem(LSTORAGE_USER_KEY)
+    localStorage.removeItem(LSTORAGE_TOKEN_KEY)
   }
 
   login (formdata, requester) {
