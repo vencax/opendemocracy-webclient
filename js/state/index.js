@@ -48,8 +48,12 @@ class AppStore extends ProposalStore {
     })
     .catch(this.onError.bind(this))
 
-    // this.requester.call(`/proposals?uid=${this.loggedUser.id}&status=draft`)
-
+    this.requester.call(`/proposals?status=thinking`)
+    .then((res) => {
+      res.data.map((i) => this.loadUserInfo(i.uid)) // load userinfos
+      this.cv.justsupported = res.data
+    })
+    .catch(this.onError.bind(this))
   }
 
   @action goToDetail(id) {

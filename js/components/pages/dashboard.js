@@ -37,6 +37,7 @@ const DashboardPage = ({store, afterLogin}) => {
           <h3>Moje koncepty</h3>
           {renderProposalList(store.cv.myproposals)}
           <h3>Navrhy s dostatecnou podporou</h3>
+          {renderProposalList(store.cv.justsupported)}
         </div>
       </div>
     </div>
