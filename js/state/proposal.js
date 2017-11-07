@@ -21,7 +21,15 @@ class ProposalStore extends AuthStore {
       discussionid: id
     })
 
-    this.requester.getEntry('proposals', id)
+    Promise.all([
+      this.requester.call(`/proposals/${id}`),
+      this.requester.call(`/proposals/${id}/feedbacks`)
+    ])
+    .then((ress) => {
+      const p = ress[0].data
+      p.feedback = ress[1].data
+      return p
+    })
     .then(action('onProposalLoaded', (proposal) => {
       proposal.comments = []
       proposal.comment = null
@@ -123,6 +131,15 @@ class ProposalStore extends AuthStore {
     this.requester.call(`/proposals/${this.cv.record.id}/publish`, 'put')
     .then((res) => {
       this.goTo('dashboard')
+    })
+    .catch(this.onError.bind(this))
+  }
+
+  @action addProposalFeedback() {
+    this.cv.proposal.feedback = 'loading'
+    this.requester.call(`/proposals/${this.cv.proposal.id}/feedbacks`, 'post', {value: 1})
+    .then((res) => {
+      this.cv.proposal.feedback = res.data
     })
     .catch(this.onError.bind(this))
   }

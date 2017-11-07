@@ -19,6 +19,12 @@ const DiscussionView = ({store}) => {
       <h1>{proposal.title}</h1>
       <p dangerouslySetInnerHTML={{__html: proposal.content}} />
       <p>comments: {proposal.comment_count}</p>
+      {
+        proposal.status === 'discussing' ? (
+          <button className='btn btn-sm' disabled={proposal.feedback !== null}
+            onClick={() => store.addProposalFeedback()}>support</button>
+        ) : null
+      }
       <hr />
       <Discussion discussion={proposal} state={store}
         onLoadComments={(page) => {
