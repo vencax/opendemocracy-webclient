@@ -100,7 +100,7 @@ const ProposalEditView = ({store}) => {
     </div>
   ) : <div>save first</div>
 
-  return (
+  const content = (
     <div className='discussion'>
       <h1>{rec.id ? 'edit proposal' : 'add new proposal'}</h1>
       <div className='row'>
@@ -113,6 +113,16 @@ const ProposalEditView = ({store}) => {
       <hr />
       <Button onClick={store.saveProposal.bind(store)}>save</Button>
       { rec.id && <Button onClick={store.publishProposal.bind(store)}>publish</Button> }
+    </div>
+  )
+
+  return (
+    <div className='container'>
+      <div className='row'>
+        <div className='col-xs-12'>
+          {content}
+        </div>
+      </div>
     </div>
   )
 }
