@@ -35,6 +35,7 @@ const DiscussionView = ({store}) => {
         onSendComment={() => store.sendComment(proposal)}
         onLoadReplies={(comment, page = 1) => store.loadReplies(store.cv, comment, page)}
         Gravatar={DefaultGravatar} Heading={DefaultHeading}
+        enabled={proposal.status === 'discussing'}
       />
     </div>
   )
