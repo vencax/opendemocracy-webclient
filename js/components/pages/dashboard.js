@@ -5,23 +5,23 @@ import DiscussionAbbrev from './partials/discussion_abbrev'
 
 const DashboardPage = ({store, afterLogin}) => {
   //
-  function renderProposalList (list) {
+  function renderProposalList (list, renderEdit = false) {
     return list ? (
       list.length ? (
-        <ul className='comments-list'>
+        <div className='proposal-list'>
           {
             list.map((dis, idx) => {
               function _detailClicked () {
                 store.goToDetail(dis.id)
               }
-              const editButton = (store.loggedUser && dis.uid === store.loggedUser.id) ? (
+              const editButton = (renderEdit && store.loggedUser && dis.uid === store.loggedUser.id) ? (
                 <button className='btn btn-sm' onClick={() => store.goTo('proposaledit', {id: dis.id})}>edit</button>
               ) : null
               return <DiscussionAbbrev discussion={dis} detailClicked={_detailClicked}
                 idx={idx} editButton={editButton} userinfos={store.userinfos} />
             })
           }
-        </ul>
+        </div>
       ) : <span>empty</span>
     ) : <span>loading</span>
   }
@@ -35,7 +35,7 @@ const DashboardPage = ({store, afterLogin}) => {
         </div>
         <div className='col-xs-6'>
           <h3>Moje koncepty</h3>
-          {renderProposalList(store.cv.myproposals)}
+          {renderProposalList(store.cv.myproposals, true)}
           <h3>Navrhy s dostatecnou podporou</h3>
           {renderProposalList(store.cv.justsupported)}
         </div>

@@ -1,3 +1,4 @@
+/* global marked */
 import React from 'react'
 import { observer } from 'mobx-react'
 
@@ -8,18 +9,18 @@ const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, ...
     <div {...rest}>
       <div className='media'>
         <div className='media-left'>
-          <img src={user ? user.img : ''} className='gravatar' />
+          <a href='javascript:void(0)' onClick={detailClicked}>
+            <img src={user ? user.img : ''} className='gravatar' />
+          </a>
         </div>
         <div className='media-body'>
-          <h6 className='media-heading'>
-            <h4>{discussion.title}</h4>
-          </h6>
+          <h4 className='media-heading'>
+            <a href='javascript:void(0)' onClick={detailClicked}>{discussion.title}</a> { editButton }
+          </h4>
           <p>
-            {user ? user.fullname : '...'} | {discussion.created} | {discussion.comment_count} <i className='fa fa-comments' aria-hidden='true'></i>
+            {user ? user.fullname : '...'} · {discussion.created} · {discussion.comment_count} <i className='fa fa-comments' aria-hidden='true'></i>
           </p>
-          <p dangerouslySetInnerHTML={{__html: discussion.content}} />
-          <button className='btn btn-sm' onClick={detailClicked}>detail</button>
-          { editButton }
+          <p dangerouslySetInnerHTML={{__html: marked(discussion.content)}} />
         </div>
       </div>
     </div>
