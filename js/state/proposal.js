@@ -34,9 +34,19 @@ class ProposalStore extends AuthStore {
       proposal.comments = []
       proposal.comment = null
       this.cv.proposal = proposal
-      return this.loadComments(this.cv, this.cv.proposal, page, 2)
+      return this.loadComments(this.cv, this.cv.proposal, {page, perPage: 2})
     }))
+    .then((comments) => {
+      this.cv.proposal.comments.map(i => this.loadUserInfo(i.uid))  // load userinfos
+    })
     .catch(this.onError.bind(this))
+  }
+
+  loadReplies(store, comment, page) {
+    super.loadReplies(store, comment, page)
+    .then((comments) => {
+      comment.replies.map(i => this.loadUserInfo(i.uid))  // load userinfos
+    })
   }
 
   @action editProposal(id) {
@@ -140,8 +150,15 @@ class ProposalStore extends AuthStore {
     this.requester.call(`/proposals/${this.cv.proposal.id}/feedbacks`, 'post', {value: 1})
     .then((res) => {
       this.cv.proposal.feedback = res.data
+      if (res.data.nextstatus && this.cv.proposal.status !== res.data.nextstatus) {
+        this.cv.proposal.status = res.data.nextstatus
+      }
     })
     .catch(this.onError.bind(this))
+  }
+
+  @action onReply(comment, reply) {
+    comment.reply = reply === null ? '' : '@' + this.userinfos.get(reply.uid).fullname
   }
 
 }

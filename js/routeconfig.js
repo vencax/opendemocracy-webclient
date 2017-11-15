@@ -22,10 +22,10 @@ const views = {
     path: '/proposal/:id',
     component: <ProposalPage />,
     onEnter: (route, params, store, queryParams) => {
-      store.showProposal(params.id, queryParams._page)
+      store.showProposal(params.id, Number(queryParams._page))
     },
     onParamsChange: (route, nextParams, store, nextQueryParams) => {
-      store.loadComments(store.cv, store.cv.proposal, nextQueryParams._page, 2)
+      store.loadComments(store.cv, store.cv.proposal, {page: Number(nextQueryParams._page), perPage: 2})
     }
   }),
   proposaledit: new Route({

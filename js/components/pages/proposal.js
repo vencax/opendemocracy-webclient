@@ -3,16 +3,18 @@ import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import Discussion from 'fb-like-discussions/components/discussion'
 
-const DefaultGravatar = ({user}) => (
-  <img src='http://www.imran.com/xyper_images/icon-user-default.png' />
-)
-
-const DefaultHeading = ({record}) => (
-  <span>{record.uid} <span>{record.created}</span></span>
-)
-
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
+
+  const DefaultGravatar = observer(({user}) => {
+    const uinfo = store.userinfos.get(user)
+    return <img src={uinfo ? uinfo.img : 'http://www.imran.com/xyper_images/icon-user-default.png'} />
+  })
+
+  const DefaultHeading = observer(({record}) => {
+    const uinfo = store.userinfos.get(record.uid)
+    return <span>{uinfo ? uinfo.fullname : '...'} </span>
+  })
 
   const content = proposal === null ? <span>loading</span> : (
     <div className='discussion'>
@@ -34,6 +36,7 @@ const DiscussionView = ({store}) => {
         onCommentChange={(newVal) => store.updateComment(proposal, newVal)}
         onSendComment={() => store.sendComment(proposal)}
         onLoadReplies={(comment, page = 1) => store.loadReplies(store.cv, comment, page)}
+        onReply={store.onReply.bind(store)}
         Gravatar={DefaultGravatar} Heading={DefaultHeading}
         enabled={proposal.status === 'discussing'}
       />
