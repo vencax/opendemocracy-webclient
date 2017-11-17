@@ -34,8 +34,14 @@ const DashboardPage = ({store, afterLogin}) => {
           {renderProposalList(store.cv.ready4voting)}
         </div>
         <div className='col-xs-6'>
-          <h3>Moje koncepty</h3>
-          {renderProposalList(store.cv.myproposals, true)}
+          {
+            store.loggedUser !== null ? (
+              <div>
+                <h3>Moje koncepty</h3>
+                {renderProposalList(store.cv.myproposals, true)}
+              </div>
+            ) : null
+          }
           <h3>Navrhy s dostatecnou podporou</h3>
           {renderProposalList(store.cv.justsupported)}
         </div>

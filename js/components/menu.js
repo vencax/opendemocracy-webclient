@@ -17,10 +17,12 @@ const AppMenu = ({store}) => {
         onClick={() => store.goTo('proposallist')}>
         {store.__('proposals')}
       </NavItem>
-      <NavItem eventKey={2}
-        onClick={() => store.goTo('proposaledit', {id: '_new'})}>
-        {store.__('new proposal')}
-      </NavItem>
+      {
+        store.loggedUser && <NavItem eventKey={2}
+          onClick={() => store.goTo('proposaledit', {id: '_new'})}>
+          {store.__('new proposal')}
+        </NavItem>
+      }
     </Nav>
   )
 

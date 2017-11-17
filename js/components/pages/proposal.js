@@ -1,14 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
+import {DEFAULT_AVATAR} from './partials/consts'
 import Discussion from 'fb-like-discussions/components/discussion'
 
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
+  const enabled = proposal && store.loggedUser !== null && proposal.status === 'discussing'
 
   const DefaultGravatar = observer(({user}) => {
     const uinfo = store.userinfos.get(user)
-    return <img src={uinfo ? uinfo.img : 'http://www.imran.com/xyper_images/icon-user-default.png'} />
+    return <img src={uinfo ? uinfo.img : DEFAULT_AVATAR} />
   })
 
   const DefaultHeading = observer(({record}) => {
@@ -19,10 +21,17 @@ const DiscussionView = ({store}) => {
   const content = proposal === null ? <span>loading</span> : (
     <div className='discussion'>
       <h1>{proposal.title}</h1>
+      <div>
+        <i className='fa fa-comments' aria-hidden='true'></i> {proposal.comment_count} · <i>
+          {proposal.created}
+        </i>
+        {
+          proposal.tags && <span>tags: {proposal.tags.split(',').join(', ')}</span>
+        }
+      </div>
       <p dangerouslySetInnerHTML={{__html: proposal.content}} />
-      <p>comments: {proposal.comment_count}</p>
       {
-        proposal.status === 'discussing' ? (
+        enabled ? (
           <button className='btn btn-sm' disabled={proposal.feedback !== null}
             onClick={() => store.addProposalFeedback()}>support</button>
         ) : null
@@ -38,7 +47,7 @@ const DiscussionView = ({store}) => {
         onLoadReplies={(comment, page = 1) => store.loadReplies(store.cv, comment, page)}
         onReply={store.onReply.bind(store)}
         Gravatar={DefaultGravatar} Heading={DefaultHeading}
-        enabled={proposal.status === 'discussing'}
+        enabled={enabled}
       />
     </div>
   )

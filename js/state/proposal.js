@@ -21,13 +21,16 @@ class ProposalStore extends AuthStore {
       discussionid: id
     })
 
-    Promise.all([
-      this.requester.call(`/proposals/${id}`),
-      this.requester.call(`/proposals/${id}/feedbacks`)
-    ])
-    .then((ress) => {
-      const p = ress[0].data
-      p.feedback = ress[1].data
+    let promise = this.requester.call(`/proposals/${id}`)
+    if (this.loggedUser !== null) {
+      promise = Promise.all([
+        promise,
+        this.requester.call(`/proposals/${id}/feedbacks`)
+      ])
+    }
+    promise.then((res) => {
+      const p = res.length === 2 ? res[0].data : res.data
+      p.feedback = res.length === 2 ? res[1].data : null
       return p
     })
     .then(action('onProposalLoaded', (proposal) => {

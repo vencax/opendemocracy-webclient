@@ -29,6 +29,7 @@ class AuthStore {
       req.data.img = _gravatarUrl(req.data.email)
       this.userinfos.set(uid, req.data)
     })
+    .catch(err => {})
   }
 
   @action showLogin() {

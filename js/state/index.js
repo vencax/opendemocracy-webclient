@@ -34,12 +34,14 @@ class AppStore extends ProposalStore {
       justsupported: null,
       ready4voting: null
     })
-    this.requester.call(`/proposals?uid=${this.loggedUser.id}&status=draft`)
-    .then((res) => {
-      res.data.map((i) => this.loadUserInfo(i.uid)) // load userinfos
-      this.cv.myproposals = res.data
-    })
-    .catch(this.onError.bind(this))
+    if (this.loggedUser !== null) {
+      this.requester.call(`/proposals?uid=${this.loggedUser.id}&status=draft`)
+      .then((res) => {
+        res.data.map((i) => this.loadUserInfo(i.uid)) // load userinfos
+        this.cv.myproposals = res.data
+      })
+      .catch(this.onError.bind(this))
+    }
 
     this.requester.call(`/proposals?status=voting`)
     .then((res) => {

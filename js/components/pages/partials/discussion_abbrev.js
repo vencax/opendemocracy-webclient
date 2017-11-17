@@ -1,6 +1,7 @@
 /* global marked */
 import React from 'react'
 import { observer } from 'mobx-react'
+import {DEFAULT_AVATAR} from './consts'
 
 const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, ...rest}) => {
   const user = userinfos.get(discussion.uid)
@@ -10,7 +11,7 @@ const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, ...
       <div className='media'>
         <div className='media-left'>
           <a href='javascript:void(0)' onClick={detailClicked}>
-            <img src={user ? user.img : ''} className='gravatar' />
+            <img src={user ? user.img : DEFAULT_AVATAR} className='gravatar' />
           </a>
         </div>
         <div className='media-body'>
