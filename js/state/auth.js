@@ -20,15 +20,14 @@ class AuthStore {
   @observable userinfos = new Map()
 
   @action loadUserInfo(uid) {
-    return new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const uinfo = {
-          uid, fullname: `fullname ${uid}`,
-          img: 'http://78.media.tumblr.com/avatar_be72aa31ff1f_128.png'
-        }
-        this.userinfos.set(uid, uinfo)
-        resolve(uinfo)
-      })
+    function _gravatarUrl(email) {
+      const hash = md5(email)
+      return `https://www.gravatar.com/avatar/${hash}`
+    }
+    return this.requester.call(`/userinfo/${uid}`)
+    .then((req) => {
+      req.data.img = _gravatarUrl(req.data.email)
+      this.userinfos.set(uid, req.data)
     })
   }
 
@@ -36,8 +35,10 @@ class AuthStore {
     this.cv = observable({
       submitted: false,
       error: false,
-      username: '',
-      password: ''
+      form: {
+        email: '',
+        passwd: ''
+      }
     })
   }
 
@@ -49,12 +50,12 @@ class AuthStore {
   }
 
   @action handleLoginFormChange(attr, val) {
-    this.cv[attr] = val
+    this.cv.form[attr] = val
   }
 
   @action performLogin() {
     this.cv.submitted = true
-    this.authService.login(this.cv, this.requester)
+    this.authService.login(this.cv.form, this.requester)
     .then((res) => {
       this.cv.submitted = false
       this.loggedUser = observable(res.user)

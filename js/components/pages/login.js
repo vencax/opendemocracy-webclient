@@ -19,13 +19,13 @@ const LoginView = ({store, afterLogin}) => {
           <form>
             <div className='form-group'>
               <label for='iUname'>username</label>
-              <input type='email' className='form-control' id='iUname' placeholder='username'
-                onChange={onAttrChange('username')} />
+              <input type='email' className='form-control' id='iUname' placeholder='email'
+                onChange={onAttrChange('email')} />
             </div>
             <div className='form-group'>
               <label for='iPassword'>Password</label>
               <input type='password' className='form-control' id='iPassword' placeholder='password'
-                onChange={onAttrChange('password')} />
+                onChange={onAttrChange('passwd')} />
             </div>
             <button type='submit' className='btn btn-default'
               disabled={store.cv.submitted}

@@ -23,12 +23,7 @@ export default class AuthService {
   }
 
   login (formdata, requester) {
-    return requester.call('/login', 'POST', {
-      username: formdata.username,
-      password: formdata.password,
-      email: `${formdata.username}@test.mordor`,
-      id: 123
-    })
+    return requester.call('/login', 'POST', formdata)
     .then((res) => {
       localStorage.setItem(LSTORAGE_USER_KEY, JSON.stringify(res.data.user))
       localStorage.setItem(LSTORAGE_TOKEN_KEY, JSON.stringify(res.data.token))
@@ -38,5 +33,4 @@ export default class AuthService {
       }
     })
   }
-
 }
