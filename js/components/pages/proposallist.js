@@ -12,11 +12,8 @@ const DiscussionsView = ({ store }) => {
             function _detailClicked () {
               store.goToDetail(dis.id)
             }
-            const editButton = (store.loggedUser && dis.uid === store.loggedUser.id) ? (
-              <button className='btn btn-sm' onClick={() => store.goTo('proposaledit', {id: dis.id})}>edit</button>
-            ) : null
-            return <DiscussionAbbrev discussion={dis} detailClicked={_detailClicked}
-              idx={idx} editButton={editButton} userinfos={store.userinfos} />
+            return <DiscussionAbbrev discussion={dis} idx={idx}
+              detailClicked={_detailClicked} userinfos={store.userinfos} />
           })
         }
       </ul>

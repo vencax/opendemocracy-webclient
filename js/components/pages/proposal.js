@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import {DEFAULT_AVATAR} from './partials/consts'
 import Discussion from 'fb-like-discussions/components/discussion'
+import {__} from '../../state/i18n'
 
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
@@ -33,7 +34,7 @@ const DiscussionView = ({store}) => {
       {
         enabled ? (
           <button className='btn btn-sm' disabled={proposal.feedback !== null}
-            onClick={() => store.addProposalFeedback()}>support</button>
+            onClick={() => store.addProposalFeedback()}>{__('support')}</button>
         ) : null
       }
       <hr />
@@ -47,7 +48,7 @@ const DiscussionView = ({store}) => {
         onLoadReplies={(comment, page = 1) => store.loadReplies(store.cv, comment, page)}
         onReply={store.onReply.bind(store)}
         Gravatar={DefaultGravatar} Heading={DefaultHeading}
-        enabled={enabled}
+        enabled={enabled} feedbackable={store.loggedUser !== null}
       />
     </div>
   )

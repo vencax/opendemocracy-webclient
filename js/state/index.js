@@ -24,9 +24,6 @@ class AppStore extends ProposalStore {
   set cv(instance) {
     this.currentView = instance
   }
-  __ (str) {
-    return str
-  }
 
   @action showDashboard() {
     this.cv = observable({

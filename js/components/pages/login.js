@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
+import {__} from '../../state/i18n'
 
 const LoginView = ({store, afterLogin}) => {
   //
@@ -19,17 +20,17 @@ const LoginView = ({store, afterLogin}) => {
           <form>
             <div className='form-group'>
               <label for='iUname'>username</label>
-              <input type='email' className='form-control' id='iUname' placeholder='email'
+              <input type='email' className='form-control' id='iUname' placeholder={__('email')}
                 onChange={onAttrChange('email')} />
             </div>
             <div className='form-group'>
               <label for='iPassword'>Password</label>
-              <input type='password' className='form-control' id='iPassword' placeholder='password'
+              <input type='password' className='form-control' id='iPassword' placeholder={__('password')}
                 onChange={onAttrChange('passwd')} />
             </div>
             <button type='submit' className='btn btn-default'
               disabled={store.cv.submitted}
-              onClick={handleSubmit}>login</button>
+              onClick={handleSubmit}>{__('login')}</button>
           </form>
         </div>
       </div>

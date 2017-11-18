@@ -1,0 +1,23 @@
+export default {
+  "add new proposal": "založit návrh",
+  "content": "obsah",
+  "edit": "upravit",
+  "edit proposal": "upravit návrh",
+  "email": "email",
+  "empty": "prázdné",
+  "loading": "nahrávám",
+  "login": "přihlásit",
+  "logout": "odhlásit",
+  "my concepts": "moje koncepty",
+  "new proposal": "nový návrh",
+  "open votings": "otevřená hlasování",
+  "password": "heslo",
+  "proposals": "návrhy",
+  "proposals with support": "podpořené návrhy",
+  "publish": "publikovat",
+  "save": "uložit",
+  "save first": "nejprve ulož",
+  "support": "podpořit",
+  "title": "název",
+  "user": "uživatel"
+}

@@ -3,6 +3,7 @@ import React from 'react'
 import {observer} from 'mobx-react'
 import {Navbar, Nav, NavItem} from 'react-bootstrap'
 import UserInfo from './userinfo'
+import {__} from '../state/i18n'
 
 const AppMenu = ({store}) => {
   //
@@ -15,12 +16,12 @@ const AppMenu = ({store}) => {
       <NavItem eventKey={1}
         active={isActive('proposals')}
         onClick={() => store.goTo('proposallist')}>
-        {store.__('proposals')}
+        {__('proposals')}
       </NavItem>
       {
         store.loggedUser && <NavItem eventKey={2}
           onClick={() => store.goTo('proposaledit', {id: '_new'})}>
-          {store.__('new proposal')}
+          {__('new proposal')}
         </NavItem>
       }
     </Nav>

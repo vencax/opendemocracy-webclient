@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react'
 import {
   FormGroup, ControlLabel, FormControl, HelpBlock, Button
 } from 'react-bootstrap'
+import {__} from '../../state/i18n'
 
 const ProposalForm = observer(({rec, errors, handleChange}) => {
   function validationState (attr) {
@@ -15,7 +16,7 @@ const ProposalForm = observer(({rec, errors, handleChange}) => {
   return (
     <div className='col-sm-12 col-md-6'>
       <FormGroup controlId='title' validationState={validationState('title')}>
-        <ControlLabel>title</ControlLabel>
+        <ControlLabel>{__('title')}</ControlLabel>
         <FormControl componentClass='input' name='title'
           onChange={(e) => handleChange('title', e.target.value)} value={rec.title} />
         <FormControl.Feedback />
@@ -23,7 +24,7 @@ const ProposalForm = observer(({rec, errors, handleChange}) => {
       </FormGroup>
 
       <FormGroup controlId='content' validationState={validationState('content')}>
-        <ControlLabel>content</ControlLabel>
+        <ControlLabel>{__('content')}</ControlLabel>
         <FormControl componentClass='textarea' rows='10' name='content'
           onChange={(e) => handleChange('content', e.target.value)} value={rec.content} />
         <FormControl.Feedback />
@@ -43,7 +44,7 @@ const OptionsForm = observer(({rec, errors, handleChange}) => {
   return (
     <form>
       <FormGroup controlId='title' validationState={validationState('title')}>
-        <ControlLabel>title</ControlLabel>
+        <ControlLabel>{__('title')}</ControlLabel>
         <FormControl componentClass='input' name='title'
           onChange={(e) => handleChange('title', e.target.value)} value={rec.title} />
         <FormControl.Feedback />
@@ -51,7 +52,7 @@ const OptionsForm = observer(({rec, errors, handleChange}) => {
       </FormGroup>
 
       <FormGroup controlId='content' validationState={validationState('content')}>
-        <ControlLabel>content</ControlLabel>
+        <ControlLabel>{__('content')}</ControlLabel>
         <FormControl componentClass='textarea' rows='10' name='content'
           onChange={(e) => handleChange('content', e.target.value)} value={rec.content} />
         <FormControl.Feedback />
@@ -98,11 +99,11 @@ const ProposalEditView = ({store}) => {
         ) : null
       }
     </div>
-  ) : <div>save first</div>
+  ) : <div>{__('save first')}</div>
 
   const content = (
     <div className='discussion'>
-      <h1>{rec.id ? 'edit proposal' : 'add new proposal'}</h1>
+      <h1>{rec.id ? __('edit proposal') : __('add new proposal')}</h1>
       <div className='row'>
         <ProposalForm rec={rec} errors={store.cv.errors}
           handleChange={store.handleProposalFormChange.bind(store)} />
@@ -111,8 +112,8 @@ const ProposalEditView = ({store}) => {
         </div>
       </div>
       <hr />
-      <Button onClick={store.saveProposal.bind(store)}>save</Button>
-      { rec.id && <Button onClick={store.publishProposal.bind(store)}>publish</Button> }
+      <Button onClick={store.saveProposal.bind(store)}>{__('save')}</Button>
+      { rec.id && <Button onClick={store.publishProposal.bind(store)}>{__('publish')}</Button> }
     </div>
   )
 
