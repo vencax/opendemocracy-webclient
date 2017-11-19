@@ -21,7 +21,7 @@ class ProposalStore extends AuthStore {
       discussionid: id
     })
 
-    let promise = this.requester.call(`/proposals/${id}`)
+    let promise = this.requester.call(`/proposals/${id}?_load=options`)
     if (this.loggedUser !== null) {
       promise = Promise.all([
         promise,
@@ -36,6 +36,7 @@ class ProposalStore extends AuthStore {
     .then(action('onProposalLoaded', (proposal) => {
       proposal.comments = []
       proposal.comment = null
+      proposal.myvote = observable.map({})
       this.cv.proposal = proposal
       return this.loadComments(this.cv, this.cv.proposal, {page, perPage: 2})
     }))
@@ -162,6 +163,10 @@ class ProposalStore extends AuthStore {
 
   @action onReply(comment, reply) {
     comment.reply = reply === null ? '' : '@' + this.userinfos.get(reply.uid).fullname
+  }
+
+  @action onVoteChange(optid, value) {
+    this.cv.proposal.myvote.set(optid, value)
   }
 
 }

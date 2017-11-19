@@ -16,7 +16,7 @@ const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, ...
         </div>
         <div className='media-body'>
           <h4 className='media-heading'>
-            <a href='javascript:void(0)' onClick={detailClicked}>{discussion.title}</a> { editButton }
+            <a href='javascript:void(0)' onClick={detailClicked}>{discussion.title}</a> { editButton } {discussion.status}
           </h4>
           <p>
             {user ? user.fullname : '...'} · {discussion.created} · {discussion.comment_count} <i className='fa fa-comments' aria-hidden='true'></i>

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import {DEFAULT_AVATAR} from './partials/consts'
 import Discussion from 'fb-like-discussions/components/discussion'
+import VoteForm from './partials/voteform'
 import {__} from '../../state/i18n'
 
 const DiscussionView = ({store}) => {
@@ -30,13 +31,22 @@ const DiscussionView = ({store}) => {
           proposal.tags && <span>tags: {proposal.tags.split(',').join(', ')}</span>
         }
       </div>
-      <p dangerouslySetInnerHTML={{__html: proposal.content}} />
-      {
-        enabled ? (
-          <button className='btn btn-sm' disabled={proposal.feedback !== null}
-            onClick={() => store.addProposalFeedback()}>{__('support')}</button>
-        ) : null
-      }
+      <div className='row'>
+        <div className='col-sm-12 col-md-6'>
+          <p dangerouslySetInnerHTML={{__html: proposal.content}} />
+          {
+            enabled ? (
+              <button className='btn btn-sm' disabled={proposal.feedback !== null}
+                onClick={() => store.addProposalFeedback()}>{__('support')}</button>
+            ) : null
+          }
+        </div>
+        <div className='col-sm-12 col-md-6'>
+          <VoteForm proposal={proposal}
+            enabled={store.loggedUser !== null && proposal.status === 'voting'}
+            onChange={store.onVoteChange.bind(store)} />
+        </div>
+      </div>
       <hr />
       <Discussion discussion={proposal} state={store}
         onLoadComments={(page) => {
