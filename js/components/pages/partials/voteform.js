@@ -2,15 +2,15 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import {__} from '../../../state/i18n'
 
-const VotingForm = ({proposal, onChange, onSubmit, valid = true, enabled = true}) => {
+const VotingForm = ({store, enabled}) => {
   return (
     <div className='media-left'>
       {
-        proposal.options.map(i => {
+        store.proposal && store.proposal.options.map(i => {
           function _onChange (evt) {
-            onChange(i.id, evt.target.value === 'on')
+            store.onVoteChange(i.id, evt.target.checked)
           }
-          const checked = proposal.myvote.has(i.id)
+          const checked = store.myvote.has(i.id)
           return (
             <div className='checkbox'>
               <label>
@@ -22,7 +22,8 @@ const VotingForm = ({proposal, onChange, onSubmit, valid = true, enabled = true}
         })
       }
       {
-        enabled && <button className='btn btn-sm' disabled={!valid} onClick={onSubmit}>{__('vote')}</button>
+        enabled && <button className='btn btn-sm' disabled={store.errors || store.takingaction}
+          onClick={store.onVoteSubmit.bind(store)}>{__('vote')}</button>
       }
     </div>
   )

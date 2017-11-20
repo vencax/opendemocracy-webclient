@@ -1,5 +1,6 @@
 import { observable, computed, toJS, action, extendObservable } from 'mobx'
 import AuthStore from './auth'
+import VotingStore from './voting'
 
 class ProposalStore extends AuthStore {
 
@@ -18,7 +19,8 @@ class ProposalStore extends AuthStore {
   @action showProposal(id, page = 1) {
     this.cv = observable({
       proposal: null,
-      discussionid: id
+      discussionid: id,
+      votingStore: new VotingStore(this.requester, this.onError.bind(this))
     })
 
     let promise = this.requester.call(`/proposals/${id}?_load=options`)
@@ -36,12 +38,12 @@ class ProposalStore extends AuthStore {
     .then(action('onProposalLoaded', (proposal) => {
       proposal.comments = []
       proposal.comment = null
-      proposal.myvote = observable.map({})
       this.cv.proposal = proposal
       return this.loadComments(this.cv, this.cv.proposal, {page, perPage: 2})
     }))
     .then((comments) => {
       this.cv.proposal.comments.map(i => this.loadUserInfo(i.uid))  // load userinfos
+      return this.cv.votingStore.load(this.cv.proposal)
     })
     .catch(this.onError.bind(this))
   }
@@ -163,10 +165,6 @@ class ProposalStore extends AuthStore {
 
   @action onReply(comment, reply) {
     comment.reply = reply === null ? '' : '@' + this.userinfos.get(reply.uid).fullname
-  }
-
-  @action onVoteChange(optid, value) {
-    this.cv.proposal.myvote.set(optid, value)
   }
 
 }

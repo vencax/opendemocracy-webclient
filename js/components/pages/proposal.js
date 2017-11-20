@@ -42,9 +42,8 @@ const DiscussionView = ({store}) => {
           }
         </div>
         <div className='col-sm-12 col-md-6'>
-          <VoteForm proposal={proposal}
-            enabled={store.loggedUser !== null && proposal.status === 'voting'}
-            onChange={store.onVoteChange.bind(store)} />
+          <VoteForm store={store.cv.votingStore}
+            enabled={store.loggedUser !== null && proposal.status === 'voting'} />
         </div>
       </div>
       <hr />
