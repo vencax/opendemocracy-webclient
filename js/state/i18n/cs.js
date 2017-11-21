@@ -1,5 +1,6 @@
 export default {
   "add new proposal": "založit návrh",
+  "choose at least one tag": "choose at least one tag",
   "content": "obsah",
   "edit": "upravit",
   "edit proposal": "upravit návrh",
@@ -8,6 +9,7 @@ export default {
   "loading": "nahrávám",
   "login": "přihlásit",
   "logout": "odhlásit",
+  "mandatory": "povinné",
   "my concepts": "moje koncepty",
   "new proposal": "nový návrh",
   "open votings": "otevřená hlasování",
@@ -18,6 +20,9 @@ export default {
   "save": "uložit",
   "save first": "nejprve ulož",
   "support": "podpořit",
+  "tags": "tagy",
   "title": "název",
-  "user": "uživatel"
+  "too long": "moc dlouhé",
+  "user": "uživatel",
+  "vote": "zavolit"
 }

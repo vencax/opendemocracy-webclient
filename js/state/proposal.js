@@ -1,6 +1,7 @@
 import { observable, computed, toJS, action, extendObservable } from 'mobx'
 import AuthStore from './auth'
 import VotingStore from './voting'
+import {__} from './i18n'
 
 class ProposalStore extends AuthStore {
 
@@ -62,21 +63,54 @@ class ProposalStore extends AuthStore {
       record: adding ? {
         title: '',
         content: '',
+        tags: ''
       } : null,
       options: [],
       optionerrors: observable.map({}),
       errors: observable.map({}),
       editedOption: null
     })
+    this.cv.optsvalidators = {
+      title: (val) => {
+        if (val.length === 0) {
+          return __('mandatory')
+        }
+        if (val.length > 64) {
+          return __('too long')
+        }
+      },
+      content: (val) => {
+        if (val.length === 0) {
+          return __('mandatory')
+        }
+      }
+    }
+    this.cv.validators = Object.assign({
+      tags: (val) => {
+        if (!val || val.length === 0) {
+          return __('mandatory')
+        }
+      }
+    }, this.cv.optsvalidators)
     if (!adding) {
       this.requester.getEntry('proposals', id, {_load: 'options'})
       .then(this.onProposalLoaded.bind(this))
       .catch(this.onError.bind(this))
+    } else {
+      this._validate('title', this.cv.record.title)
+      this._validate('content', this.cv.record.content)
+      this._validate('tags', this.cv.record.tags)
     }
+  }
+
+  _validateOpt(attr, val) {
+    const err = this.cv.optsvalidators[attr](val)
+    return err ? this.cv.optionerrors.set(attr, err) : this.cv.optionerrors.delete(attr)
   }
 
   @action onOptionAttrChange(attr, val) {
     this.cv.editedOption[attr] = val
+    this._validateOpt(attr, val)
   }
 
   @action editOption(opt) {
@@ -84,6 +118,20 @@ class ProposalStore extends AuthStore {
       title: '',
       content: ''
     }
+    this._validateOpt('title', this.cv.editedOption.title)
+    this._validateOpt('content', this.cv.editedOption.content)
+  }
+
+  @computed get propPublishable() {
+    return this.cv.errors.size === 0 && this.cv.options.length >= 2
+  }
+
+  @computed get propSaveable() {
+    return this.cv.errors.size === 0
+  }
+
+  @computed get optSaveable() {
+    return this.cv.optionerrors.size === 0
   }
 
   @action removeOption(opt) {
@@ -123,10 +171,19 @@ class ProposalStore extends AuthStore {
     this.cv.options = proposal.options
     delete proposal.options
     this.cv.record = proposal
+    this._validate('title', this.cv.record.title)
+    this._validate('content', this.cv.record.content)
+    this._validate('tags', this.cv.record.tags)
   }
 
   @action handleProposalFormChange(attr, val) {
     this.cv.record[attr] = val
+    this._validate(attr, val)
+  }
+
+  _validate(attr, val) {
+    const err = this.cv.validators[attr](val)
+    return err ? this.cv.errors.set(attr, err) : this.cv.errors.delete(attr)
   }
 
   @action saveProposal() {

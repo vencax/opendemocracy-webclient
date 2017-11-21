@@ -4,6 +4,7 @@ import { observer, inject } from 'mobx-react'
 import {
   FormGroup, ControlLabel, FormControl, HelpBlock, Button
 } from 'react-bootstrap'
+import {Typeahead} from 'react-bootstrap-typeahead'
 import {__} from '../../state/i18n'
 
 const ProposalForm = observer(({rec, errors, handleChange}) => {
@@ -13,6 +14,7 @@ const ProposalForm = observer(({rec, errors, handleChange}) => {
   function errorText (attr) {
     return errors.get(attr)
   }
+  const tagOptions = ['zakony', 'neco', 'neco2']
   return (
     <div className='col-sm-12 col-md-6'>
       <FormGroup controlId='title' validationState={validationState('title')}>
@@ -30,13 +32,20 @@ const ProposalForm = observer(({rec, errors, handleChange}) => {
         <FormControl.Feedback />
         {errorText ? <HelpBlock>{errorText('content')}</HelpBlock> : null}
       </FormGroup>
+
+      <span>{__('tags')}</span>
+      <Typeahead labelKey='tags' multiple options={tagOptions}
+        placeholder={__('choose at least one tag')} selected={rec.tags ? rec.tags.split(',') : ''}
+        onChange={selected => handleChange('tags', selected.join(','))}
+      />
+      {errors.has('tags') && <span className='text-danger'>{errors.get('tags')}</span>}
     </div>
   )
 })
 
 const OptionsForm = observer(({rec, errors, handleChange}) => {
   function validationState (attr) {
-    return errorText(attr) ? 'error' : null
+    return errors.has(attr) ? 'error' : null
   }
   function errorText (attr) {
     return errors.get(attr)
@@ -93,7 +102,7 @@ const ProposalEditView = ({store}) => {
             <OptionsForm rec={store.cv.editedOption}
               handleChange={store.onOptionAttrChange.bind(store)}
               errors={store.cv.optionerrors} />
-            <Button onClick={store.saveOption.bind(store)}>save</Button>
+            <Button onClick={store.saveOption.bind(store)} disabled={!store.optSaveable}>save</Button>
             <Button onClick={store.cancelEditOption.bind(store)}>cancel</Button>
           </div>
         ) : null
@@ -112,8 +121,9 @@ const ProposalEditView = ({store}) => {
         </div>
       </div>
       <hr />
-      <Button onClick={store.saveProposal.bind(store)}>{__('save')}</Button>
-      { rec.id && <Button onClick={store.publishProposal.bind(store)}>{__('publish')}</Button> }
+      <Button onClick={store.saveProposal.bind(store)} disabled={!store.propSaveable}>{__('save')}</Button>
+      { rec.id && <Button onClick={store.publishProposal.bind(store)}
+        disabled={!store.propPublishable}>{__('publish')}</Button> }
     </div>
   )
 
