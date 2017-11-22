@@ -6,15 +6,6 @@ const CleanWebpackPlugin = require('clean-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
-const conf = new HtmlWebpackPlugin({
-  perPage: process.env.PERPAGE || 15,
-  siteName: process.env.SITENAME || 'OPEN voting',
-  apiUrl: process.env.API_URL,
-  inject: false,
-  template: 'index.template.html'
-})
-console.log('api-url:', process.env.API_URL)
-
 module.exports = (env = {
   dev: true
 }) => {
@@ -30,6 +21,15 @@ module.exports = (env = {
   if (!env.dev) {
     babelOptions.plugins.push('transform-react-remove-prop-types')
   }
+  const conf = new HtmlWebpackPlugin({
+    perPage: process.env.PERPAGE || 15,
+    siteName: process.env.SITENAME || 'OPEN voting',
+    apiUrl: process.env.API_URL,
+    prefix: env.dev ? '/' : '',
+    inject: false,
+    template: 'index.template.html'
+  })
+  console.log('api-url:', process.env.API_URL)
   const config = {
     devtool: ifProd('hidden-source-map', 'inline-source-map'),
     entry: path.resolve('./js/main.js'),
