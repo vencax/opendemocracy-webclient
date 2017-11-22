@@ -209,12 +209,18 @@ class ProposalStore extends AuthStore {
   }
 
   @action addProposalFeedback() {
+    const adding = this.cv.proposal.feedback === null
     this.cv.proposal.feedback = 'loading'
-    this.requester.call(`/proposals/${this.cv.proposal.id}/feedbacks`, 'post', {value: 1})
+    const method = adding ? 'post' : 'delete'
+    this.requester.call(`/proposals/${this.cv.proposal.id}/feedbacks`, method, {value: 1})
     .then((res) => {
-      this.cv.proposal.feedback = res.data
-      if (res.data.nextstatus && this.cv.proposal.status !== res.data.nextstatus) {
-        this.cv.proposal.status = res.data.nextstatus
+      if (adding) {
+        this.cv.proposal.feedback = res.data
+        if (res.data.nextstatus && this.cv.proposal.status !== res.data.nextstatus) {
+          this.cv.proposal.status = res.data.nextstatus
+        }
+      } else {
+        this.cv.proposal.feedback = null
       }
     })
     .catch(this.onError.bind(this))

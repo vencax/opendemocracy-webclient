@@ -13,6 +13,7 @@ export default {
   "my concepts": "moje koncepty",
   "new proposal": "nový návrh",
   "next": "další",
+  "not support anymore": "už nepodporovat",
   "open votings": "otevřená hlasování",
   "password": "heslo",
   "prev": "předchozí",

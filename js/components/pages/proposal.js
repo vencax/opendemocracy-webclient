@@ -41,8 +41,9 @@ const DiscussionView = ({store}) => {
           <p dangerouslySetInnerHTML={{__html: proposal.content}} />
           {
             enabled ? (
-              <button className='btn btn-sm' disabled={proposal.feedback !== null}
-                onClick={() => store.addProposalFeedback()}>{__('support')}</button>
+              <button className='btn btn-sm' onClick={() => store.addProposalFeedback()}>
+                {proposal.feedback === null ? __('support') : __('not support anymore')}
+              </button>
             ) : null
           }
         </div>
