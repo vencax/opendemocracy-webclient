@@ -5,9 +5,10 @@ React/mobX based web application for [OPENdemocracy api](https://github.com/venc
 ## run it!
 
 ```sh
-git clone https://github.com/opendemocracy-webclient webclient
+git clone https://github.com/vencax/opendemocracy-webclient webclient
 cd webclient
 npm i
+echo 'API_URL=http://localhost:3000' > .env
 npm start
 ```
 
