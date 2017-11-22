@@ -1,4 +1,4 @@
-/* global marked */
+/* global marked, moment */
 import React from 'react'
 import { observer } from 'mobx-react'
 import {DEFAULT_AVATAR} from './consts'
@@ -19,7 +19,7 @@ const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, ...
             <a href='javascript:void(0)' onClick={detailClicked}>{discussion.title}</a> { editButton } {discussion.status}
           </h4>
           <p>
-            {user ? user.fullname : '...'} · {discussion.created} · {discussion.comment_count} <i className='fa fa-comments' aria-hidden='true'></i>
+            {user ? user.fullname : '...'} · {moment(discussion.created).format('DD.MM.YYYY')} · {discussion.comment_count} <i className='fa fa-comments' aria-hidden='true'></i>
           </p>
           <p dangerouslySetInnerHTML={{__html: marked(discussion.content)}} />
         </div>

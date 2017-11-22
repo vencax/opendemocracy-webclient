@@ -1,3 +1,4 @@
+/* global moment */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
@@ -5,6 +6,8 @@ import {DEFAULT_AVATAR} from './partials/consts'
 import Discussion from 'fb-like-discussions/components/discussion'
 import VoteForm from './partials/voteform'
 import {__} from '../../state/i18n'
+
+const _formatDate = (d) => moment(d).format('DD.MM.YYYY')
 
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
@@ -25,10 +28,12 @@ const DiscussionView = ({store}) => {
       <h1>{proposal.title}</h1>
       <div>
         <i className='fa fa-comments' aria-hidden='true'></i> {proposal.comment_count} · <i>
-          {proposal.created}
+          {_formatDate(proposal.created)}
         </i>
         {
-          proposal.tags && <span>tags: {proposal.tags.split(',').join(', ')}</span>
+          proposal.tags && <span> · tags: {proposal.tags.split(',').map(i => (
+            <button type='button' className='btn btn-default btn-xs'>{i}</button>
+          ))}</span>
         }
       </div>
       <div className='row'>
@@ -58,6 +63,7 @@ const DiscussionView = ({store}) => {
         onReply={store.onReply.bind(store)}
         Gravatar={DefaultGravatar} Heading={DefaultHeading}
         enabled={enabled} feedbackable={store.loggedUser !== null}
+        formatDate={_formatDate} __={__}
       />
     </div>
   )

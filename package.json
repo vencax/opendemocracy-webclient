@@ -8,7 +8,7 @@
     "start": "./node_modules/.bin/webpack-dev-server --content-base . --inline --hot --history-api-fallback",
     "test": "NODE_ENV=test && mocha './test/**/*.spec.js' --compilers js:babel-core/register --require test/setup.js",
     "test:watch": "npm test -- --watch",
-    "extract": "extract-gettext --lang cs --prefix 'export default ' -o js/state/i18n/ js/"
+    "extract": "extract-gettext --lang cs --prefix 'export default ' -o js/state/i18n/ js/,node_modules/fb-like-discussions/components/"
   },
   "keywords": [],
   "author": {
