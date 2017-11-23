@@ -51,7 +51,7 @@ const OptionsForm = observer(({rec, errors, handleChange}) => {
     return errors.get(attr)
   }
   return (
-    <form>
+    <div>
       <FormGroup controlId='title' validationState={validationState('title')}>
         <ControlLabel>{__('title')}</ControlLabel>
         <FormControl componentClass='input' name='title'
@@ -67,7 +67,7 @@ const OptionsForm = observer(({rec, errors, handleChange}) => {
         <FormControl.Feedback />
         {errorText ? <HelpBlock>{errorText('content')}</HelpBlock> : null}
       </FormGroup>
-    </form>
+    </div>
   )
 })
 
