@@ -8,3 +8,4 @@ server.js
 vars.env
 .*
 js/main.js
+*.sh
