@@ -1,5 +1,6 @@
 export default {
   "add new proposal": "založit návrh",
+  "cancel": "storno",
   "choose at least one tag": "choose at least one tag",
   "content": "obsah",
   "edit": "upravit",
@@ -17,11 +18,13 @@ export default {
   "open votings": "otevřená hlasování",
   "password": "heslo",
   "prev": "předchozí",
+  "proposal already published, you cannot edit it anymore": "návrh už je publikován, nelze ho už měnit",
   "proposals": "návrhy",
   "proposals with support": "podpořené návrhy",
   "publish": "publikovat",
   "replies": "odpovědí",
   "reply": "odpovědět",
+  "results": "výsledky",
   "save": "uložit",
   "save first": "nejprve ulož",
   "send": "odeslat",
@@ -30,5 +33,8 @@ export default {
   "title": "název",
   "too long": "moc dlouhé",
   "user": "uživatel",
-  "vote": "zavolit"
+  "vote": "zavolit",
+  "voting begins at": "hlasování začne v",
+  "voting ended at": "hlasování skončí v",
+  "voting ends at": "hlasování skončilo v"
 }

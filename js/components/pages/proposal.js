@@ -7,7 +7,7 @@ import Discussion from 'fb-like-discussions/components/discussion'
 import VoteForm from './partials/voting'
 import {__} from '../../state/i18n'
 
-const _formatDate = (d) => moment(d).format('DD.MM.YYYY')
+const _formatDate = (d) => moment(d).format('HH:mm DD.MM.YYYY')
 
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
@@ -27,7 +27,7 @@ const DiscussionView = ({store}) => {
     <div className='discussion'>
       <h1>{proposal.title}</h1>
       <div>
-        <i className='fa fa-comments' aria-hidden='true'></i> {proposal.comment_count} · <i>
+        <i className='fa fa-comments' aria-hidden='true' /> {proposal.comment_count} · <i>
           {_formatDate(proposal.created)}
         </i>
         {
@@ -38,20 +38,36 @@ const DiscussionView = ({store}) => {
       </div>
       <div className='row'>
         <div className='col-sm-12 col-md-6'>
-          <p dangerouslySetInnerHTML={{__html: proposal.content}} />
           {
-            enabled ? (
+            proposal.status === 'discussing' && enabled ? (
               <button className='btn btn-sm' onClick={() => store.addProposalFeedback()}>
                 {proposal.feedback === null ? __('support') : __('not support anymore')}
               </button>
-            ) : null
+            ) : (
+              proposal.status === 'thinking' ? (
+                <span>{__('voting begins at')}: {_formatDate(proposal.votingbegins)}</span>
+              ) : (
+                proposal.status === 'voting' ? (
+                  <span>{__('voting ends at')}: {_formatDate(proposal.votingends)}</span>
+                ) : proposal.status === 'locked' ? (
+                  <span>{__('voting ended at')}: {_formatDate(proposal.votingends)}</span>
+                ) : null
+              )
+            )
           }
+          <p dangerouslySetInnerHTML={{__html: proposal.content}} />
         </div>
         <div className='col-sm-12 col-md-6'>
           {
-            store.cv.votingStore.proposal &&
-            <VoteForm store={store.cv.votingStore}
-              enabled={store.loggedUser !== null && proposal.status === 'voting'} />
+            proposal.status === 'voting' && store.cv.votingStore.proposal ? (
+              <VoteForm store={store.cv.votingStore}
+                enabled={store.loggedUser !== null && proposal.status === 'voting'} />
+            ) : proposal.status === 'locked' ? (
+              <div>
+                <h3>{__('results')}</h3>
+                <p>results</p>
+              </div>
+            ) : null
           }
         </div>
       </div>
