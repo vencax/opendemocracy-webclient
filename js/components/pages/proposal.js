@@ -4,7 +4,7 @@ import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import {DEFAULT_AVATAR} from './partials/consts'
 import Discussion from 'fb-like-discussions/components/discussion'
-import VoteForm from './partials/voteform'
+import VoteForm from './partials/voting'
 import {__} from '../../state/i18n'
 
 const _formatDate = (d) => moment(d).format('DD.MM.YYYY')
@@ -48,8 +48,11 @@ const DiscussionView = ({store}) => {
           }
         </div>
         <div className='col-sm-12 col-md-6'>
-          <VoteForm store={store.cv.votingStore}
-            enabled={store.loggedUser !== null && proposal.status === 'voting'} />
+          {
+            store.cv.votingStore.proposal &&
+            <VoteForm store={store.cv.votingStore}
+              enabled={store.loggedUser !== null && proposal.status === 'voting'} />
+          }
         </div>
       </div>
       <hr />
