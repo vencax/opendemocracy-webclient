@@ -12,12 +12,13 @@ export default class VotingStore {
 
   load(proposal) {
     this.proposal = proposal
-    return this.requester.call(`/proposals/${proposal.id}/mycast`)
+    return this.proposal.status === 'voting' && this.requester.call(`/proposals/${proposal.id}/mycast`)
     .then((res) => {
       if (res.data && res.data.length) {
         this.myvote = res.data[0]
       }
     })
+    .catch(() => {})
   }
 
   @action onVoteChange(value) {
