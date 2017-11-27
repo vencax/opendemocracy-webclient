@@ -24,17 +24,18 @@ class ProposalStore extends AuthStore {
       votingStore: new VotingStore(this.requester, this.onError.bind(this))
     })
 
-    let promise = this.requester.call(`/proposals/${id}?_load=options`)
-    if (this.loggedUser !== null) {
-      promise = Promise.all([
-        promise,
-        this.requester.call(`/proposals/${id}/feedbacks`)
-      ])
-    }
-    promise.then((res) => {
-      const p = res.length === 2 ? res[0].data : res.data
-      p.feedback = res.length === 2 ? res[1].data : null
+    this.requester.call(`/proposals/${id}?_load=options`)
+    .then((res) => {
+      const p = res.data
+      p.feedback = null
       p.results = null
+      if (this.loggedUser !== null) {
+        this.requester.call(`/proposals/${id}/feedbacks`)
+        .then((res) => {
+          this.cv.proposal.feedback = res.data
+        })
+        .catch(() => {})
+      }
       if (p.status === 'locked') {
         this.requester.call(`/proposals/${p.id}/results`)
         .then((res) => {
