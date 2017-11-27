@@ -227,8 +227,8 @@ class ProposalStore extends AuthStore {
     .then((res) => {
       if (adding) {
         this.cv.proposal.feedback = res.data
-        if (res.data.nextstatus && this.cv.proposal.status !== res.data.nextstatus) {
-          this.cv.proposal.status = res.data.nextstatus
+        if (this.cv.proposal.status !== res.data.proposal.status) {
+          Object.assign(this.cv.proposal, res.data.proposal)
         }
       } else {
         this.cv.proposal.feedback = null
