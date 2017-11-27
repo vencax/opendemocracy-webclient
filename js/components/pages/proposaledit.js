@@ -77,7 +77,7 @@ const ProposalEditView = ({store}) => {
   }
   const rec = store.cv.record
   let content
-  if (rec.status !== 'draft') {
+  if (rec.id && rec.status !== 'draft') {
     content = <div>{__('proposal already published, you cannot edit it anymore')}</div>
   } else {
     const optsForm = rec.id ? (
