@@ -12,7 +12,7 @@ export default class VotingStore {
 
   load(proposal) {
     this.proposal = proposal
-    return this.requester.call(`/proposals/${proposal.id}/casts`)
+    return this.requester.call(`/proposals/${proposal.id}/mycast`)
     .then((res) => {
       if (res.data && res.data.length) {
         this.myvote = res.data[0]

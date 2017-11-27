@@ -5,6 +5,7 @@ import { observer, inject } from 'mobx-react'
 import {DEFAULT_AVATAR} from './partials/consts'
 import Discussion from 'fb-like-discussions/components/discussion'
 import VoteForm from './partials/voting'
+import Results from './partials/results'
 import {__} from '../../state/i18n'
 
 const _formatDate = (d) => moment(d).format('HH:mm DD.MM.YYYY')
@@ -27,7 +28,7 @@ const DiscussionView = ({store}) => {
     <div className='discussion'>
       <h1>{proposal.title}</h1>
       <div>
-        <i className='fa fa-comments' aria-hidden='true' /> {proposal.comment_count} · <i>
+        {proposal.status} · <i className='fa fa-comments' aria-hidden='true' /> {proposal.comment_count} · <i>
           {_formatDate(proposal.created)}
         </i>
         {
@@ -65,7 +66,7 @@ const DiscussionView = ({store}) => {
             ) : proposal.status === 'locked' ? (
               <div>
                 <h3>{__('results')}</h3>
-                <p>results</p>
+                <Results proposal={proposal} />
               </div>
             ) : null
           }

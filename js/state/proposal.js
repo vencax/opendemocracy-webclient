@@ -34,6 +34,14 @@ class ProposalStore extends AuthStore {
     promise.then((res) => {
       const p = res.length === 2 ? res[0].data : res.data
       p.feedback = res.length === 2 ? res[1].data : null
+      p.results = null
+      if (p.status === 'locked') {
+        this.requester.call(`/proposals/${p.id}/results`)
+        .then((res) => {
+          this.cv.proposal.results = res.data
+        })
+        .catch(this.onError.bind(this))
+      }
       return p
     })
     .then(action('onProposalLoaded', (proposal) => {
