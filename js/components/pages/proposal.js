@@ -60,15 +60,15 @@ const DiscussionView = ({store}) => {
         </div>
         <div className='col-sm-12 col-md-6'>
           {
-            proposal.status === 'voting' && store.cv.votingStore.proposal ? (
-              <VoteForm store={store.cv.votingStore}
-                enabled={store.loggedUser !== null && proposal.status === 'voting'} />
-            ) : proposal.status === 'locked' ? (
+            proposal.status === 'locked' ? (
               <div>
                 <h3>{__('results')}</h3>
                 <Results proposal={proposal} />
               </div>
-            ) : null
+            ) : (
+              <VoteForm store={store.cv.votingStore}
+                enabled={store.loggedUser !== null && proposal.status === 'voting'} />
+            )
           }
         </div>
       </div>

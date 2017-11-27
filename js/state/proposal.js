@@ -49,11 +49,13 @@ class ProposalStore extends AuthStore {
       proposal.comments = []
       proposal.comment = null
       this.cv.proposal = proposal
-      return this.loadComments(this.cv, this.cv.proposal, {page, perPage: 2})
+      this.cv.votingStore.load(this.cv.proposal)
+      return this.loadComments(this.cv, this.cv.proposal, {
+        page, perPage: 2, loadFeedbacks: this.loggedUser !== null
+      })
     }))
     .then((comments) => {
       this.cv.proposal.comments.map(i => this.loadUserInfo(i.uid))  // load userinfos
-      return this.cv.votingStore.load(this.cv.proposal)
     })
     .catch(this.onError.bind(this))
   }
