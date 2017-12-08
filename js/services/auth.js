@@ -1,4 +1,4 @@
-/* global localStorage */
+/* global localStorage Conf md5 */
 const LSTORAGE_USER_KEY = 'opendemocracy_user'
 const LSTORAGE_TOKEN_KEY = 'opendemocracy_token'
 
@@ -23,14 +23,47 @@ export default class AuthService {
   }
 
   login (formdata, requester) {
-    return requester.call('/login', 'POST', formdata)
+    return requester.call(`${Conf.authUrl}/login`, 'POST', {
+      username: formdata.email,
+      password: formdata.passwd
+    })
     .then((res) => {
       localStorage.setItem(LSTORAGE_USER_KEY, JSON.stringify(res.data.user))
       localStorage.setItem(LSTORAGE_TOKEN_KEY, JSON.stringify(res.data.token))
-      return {
-        user: res.data.user,
-        token: res.data.token
-      }
+      return res.data
     })
+  }
+
+  register (formdata, requester) {
+    return requester.call(`${Conf.authUrl}/register`, 'POST', formdata)
+    .then((res) => {
+      return res.data
+    })
+  }
+
+  requestPwdChange (email, requester) {
+    return requester.call(`${Conf.authUrl}/forgotten`, 'PUT', {email})
+    .then((res) => {
+      return res.data
+    })
+  }
+
+  setPwd (newPwd, token, requester) {
+    const url = `${Conf.authUrl}/setpasswd?sptoken=${token}`
+    return requester.call(url, 'PUT', {password: newPwd})
+  }
+
+  getUserInfos (uids, requester) {
+    function _gravatarUrl (email) {
+      const hash = md5(email)
+      return `https://www.gravatar.com/avatar/${hash}`
+    }
+    return requester.call(`${Conf.authUrl}/api/user/info/${uids.join(',')}`)
+    .then((res) => {
+      return res.data.map(i => {
+        return i.email ? Object.assign(i, {img: _gravatarUrl(i.email)}) : i
+      })
+    })
+    .catch((_) => {}) // don't handle
   }
 }

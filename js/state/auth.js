@@ -1,6 +1,7 @@
 import { observable, computed, toJS, action, transaction, extendObservable, asMap } from 'mobx'
 import CommentsStateInit from 'fb-like-discussions/state'
 import AuthService from '../services/auth'
+import {__} from './i18n'
 
 class AuthStore {
 
@@ -18,18 +19,17 @@ class AuthStore {
   }
 
   @observable userinfos = new Map()
+  _ladingInfos = {}
 
   @action loadUserInfo(uid) {
-    function _gravatarUrl(email) {
-      const hash = md5(email)
-      return `https://www.gravatar.com/avatar/${hash}`
+    if (!(uid in this._ladingInfos)) {
+      this._ladingInfos[uid] = this.authService.getUserInfos([uid], this.requester)
+      .then((infos) => {
+        delete this._ladingInfos[uid]
+        this.userinfos.set(uid, infos[0])
+      })
     }
-    return this.requester.call(`/userinfo/${uid}`)
-    .then((req) => {
-      req.data.img = _gravatarUrl(req.data.email)
-      this.userinfos.set(uid, req.data)
-    })
-    .catch(err => {})
+    return this._ladingInfos[uid]
   }
 
   @action showLogin() {
@@ -40,6 +40,82 @@ class AuthStore {
         email: '',
         passwd: ''
       }
+    })
+  }
+
+  @action showRegister() {
+    this.cv = observable({
+      submitted: false,
+      error: false,
+      errors: observable.map({}),
+      form: {
+        username: '',
+        password: '',
+        name: '',
+        email: ''
+      }
+    })
+    this.cv.validators = {
+      name: (val) => {
+        if (val.length === 0) {
+          return __('mandatory')
+        }
+        if (val.length > 64) {
+          return __('too long')
+        }
+      },
+      username: (val) => {
+        if (val.length === 0) {
+          return __('mandatory')
+        }
+        if (val.length > 64) {
+          return __('too long')
+        }
+      },
+      password: (val) => {
+        if (val.length === 0) {
+          return __('mandatory')
+        }
+        if (val.length > 64) {
+          return __('too long')
+        }
+      },
+      email: (val) => {
+        if (val.length === 0) {
+          return __('mandatory')
+        }
+        if (!val.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
+          return __('invalid email')
+        }
+        if (val.length > 64) {
+          return __('too long')
+        }
+      }
+    }
+    for (let v in this.cv.validators) {
+      this._validate(v, this.cv.form[v])
+    }
+  }
+
+  @action handleRegisterFormChange(attr, val) {
+    this.cv.form[attr] = val
+    this._validate(attr, val)
+  }
+
+  _validate(attr, val) {
+    const err = this.cv.validators[attr](val)
+    return err ? this.cv.errors.set(attr, err) : this.cv.errors.delete(attr)
+  }
+
+  @action performRegister() {
+    this.cv.submitted = true
+    this.authService.register(this.cv.form, this.requester)
+    .then((res) => {
+      this.cv.error = 'success'
+    })
+    .catch((err) => {
+      this.error = err
+      this.cv.submitted = false
     })
   }
 

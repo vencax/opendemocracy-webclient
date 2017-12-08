@@ -69,12 +69,8 @@ class DataRequester {
   }
 
   call (url, method = 'get', data) {   // call our API
-    return axios({
-      method: method,
-      url: `${this.apiUrl}${url}`,
-      headers: this.authHeaders(),
-      data: data
-    })
+    url = url.indexOf('http') === 0 ? url : `${this.apiUrl}${url}`
+    return axios({method, url, headers: this.authHeaders(), data})
   }
 
   callExternalRes (conf) {   // just to be able to call external API

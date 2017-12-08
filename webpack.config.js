@@ -25,6 +25,7 @@ module.exports = (env = {
     perPage: process.env.PERPAGE || 15,
     siteName: process.env.SITENAME || 'OPEN voting',
     apiUrl: process.env.API_URL,
+    authUrl: process.env.AUTH_URL,
     prefix: env.dev ? '/' : '',
     inject: false,
     template: 'index.template.html'

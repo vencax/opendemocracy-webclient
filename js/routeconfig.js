@@ -3,6 +3,7 @@ import { Route } from 'mobx-router'
 
 import DashboardPage from './components/pages/dashboard'
 import LoginPage from './components/pages/login'
+import RegisterPage from './components/pages/register'
 import ProposalPage from './components/pages/proposal'
 import ProposalEditPage from './components/pages/proposaledit'
 import ProposalListPage from './components/pages/proposallist'
@@ -17,6 +18,11 @@ const views = {
     path: '/login',
     component: <LoginPage />,
     beforeEnter: (route, params, store) => store.showLogin()
+  }),
+  register: new Route({
+    path: '/register',
+    component: <RegisterPage />,
+    beforeEnter: (route, params, store) => store.showRegister()
   }),
   proposal: new Route({
     path: '/proposal/:id',

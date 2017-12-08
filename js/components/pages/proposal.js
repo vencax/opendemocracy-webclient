@@ -16,19 +16,19 @@ const DiscussionView = ({store}) => {
 
   const DefaultGravatar = observer(({user}) => {
     const uinfo = store.userinfos.get(user)
-    return <img src={uinfo ? uinfo.img : DEFAULT_AVATAR} />
+    return <img src={uinfo && uinfo.img ? uinfo.img : DEFAULT_AVATAR} />
   })
 
   const DefaultHeading = observer(({record}) => {
     const uinfo = store.userinfos.get(record.uid)
-    return <span>{uinfo ? uinfo.fullname : '...'} </span>
+    return <span>{uinfo ? uinfo.name : '...'} </span>
   })
 
   const content = proposal === null ? <span>loading</span> : (
     <div className='discussion'>
       <h1>{proposal.title}</h1>
       <div>
-        {proposal.status} · <i className='fa fa-comments' aria-hidden='true' /> {proposal.comment_count} · <i>
+        {proposal.status} · <i className='fa fa-comments' /> {proposal.comment_count} · <i>
           {_formatDate(proposal.created)}
         </i>
         {
