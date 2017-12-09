@@ -108,13 +108,14 @@ class AuthStore {
   }
 
   @action performRegister() {
+    this.cv.error = null
     this.cv.submitted = true
     this.authService.register(this.cv.form, this.requester)
     .then((res) => {
       this.cv.error = 'success'
     })
     .catch((err) => {
-      this.error = err
+      this.cv.error = __('user already exists')
       this.cv.submitted = false
     })
   }

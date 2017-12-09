@@ -49,14 +49,21 @@ const RegisterView = ({store, afterLogin}) => {
           </div>
           {
             store.cv.error === 'success' ? (
-              <span>
+              <div>
                 <i className='fa fa-check' />&nbsp;
                 __('user created, check your mailbox for further instruction')
-              </span>
+              </div>
             ) : (
-              <button type='submit' className='btn btn-default'
-                disabled={store.cv.submitted || errs.size > 0}
-                onClick={() => store.performRegister()}>{__('submit')}</button>
+              <div>{store.cv.error}</div>
+            )
+          }
+          {
+            store.cv.error !== 'success' && (
+              <div>
+                <button type='submit' className='btn btn-default'
+                  disabled={store.cv.submitted || errs.size > 0}
+                  onClick={() => store.performRegister()}>{__('submit')}</button>
+              </div>
             )
           }
         </div>

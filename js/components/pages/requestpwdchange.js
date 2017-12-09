@@ -20,7 +20,7 @@ const ReqPwdChangeView = ({store, afterLogin}) => {
               onChange={onAttrChange('email')} />
           </div>
           {
-            store.cv.error ? <div>{store.cv.error}</div> : null
+            store.cv.error ? <div><i className='fa fa-check' />&nbsp;{store.cv.error}</div> : null
           }
           <div>
             <button type='submit' className='btn btn-default'
