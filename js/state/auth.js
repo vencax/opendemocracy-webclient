@@ -131,6 +131,7 @@ class AuthStore {
   }
 
   @action performLogin() {
+    this.cv.error = null
     this.cv.submitted = true
     this.authService.login(this.cv.form, this.requester)
     .then((res) => {
@@ -140,7 +141,30 @@ class AuthStore {
       this.goTo('dashboard')
     })
     .catch((err) => {
-      this.error = err
+      this.cv.error = __('wrong credentials')
+      this.cv.submitted = false
+    })
+  }
+
+  @action showReqPwdChange() {
+    this.cv = observable({
+      submitted: false,
+      error: false,
+      form: {
+        email: ''
+      }
+    })
+  }
+
+  @action performReqPwdChange() {
+    this.cv.error = null
+    this.cv.submitted = true
+    this.authService.requestPwdChange(this.cv.form.email, this.requester)
+    .then((res) => {
+      this.cv.error = __('password change requested, see your mailbox for details')
+    })
+    .catch((err) => {
+      this.cv.error = __('wrong email')
       this.cv.submitted = false
     })
   }

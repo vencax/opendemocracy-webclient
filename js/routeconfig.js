@@ -4,6 +4,7 @@ import { Route } from 'mobx-router'
 import DashboardPage from './components/pages/dashboard'
 import LoginPage from './components/pages/login'
 import RegisterPage from './components/pages/register'
+import RequestPwdChangePage from './components/pages/requestpwdchange'
 import ProposalPage from './components/pages/proposal'
 import ProposalEditPage from './components/pages/proposaledit'
 import ProposalListPage from './components/pages/proposallist'
@@ -23,6 +24,11 @@ const views = {
     path: '/register',
     component: <RegisterPage />,
     beforeEnter: (route, params, store) => store.showRegister()
+  }),
+  requestpwdchange: new Route({
+    path: '/requestpwdchange',
+    component: <RequestPwdChangePage />,
+    beforeEnter: (route, params, store) => store.showReqPwdChange()
   }),
   proposal: new Route({
     path: '/proposal/:id',

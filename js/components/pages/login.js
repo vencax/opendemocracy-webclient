@@ -23,11 +23,23 @@ const LoginView = ({store, afterLogin}) => {
             <input type='password' className='form-control' id='iPassword' placeholder={__('password')}
               onChange={onAttrChange('passwd')} />
           </div>
-          <button type='submit' className='btn btn-default'
-            disabled={store.cv.submitted}
-            onClick={() => store.performLogin()}>{__('login')}</button>
-          &nbsp;|&nbsp;
-          <a href='javascript:void' onClick={() => store.goTo('register')}>{__('register')}</a>
+          {
+            store.cv.error ? (
+              <div>
+                {store.cv.error}&nbsp;|&nbsp;
+                <a href='javascript:void' onClick={() => store.goTo('requestpwdchange')}>
+                  {__('request password change')}
+                </a>
+              </div>
+            ) : null
+          }
+          <div>
+            <button type='submit' className='btn btn-default'
+              disabled={store.cv.submitted}
+              onClick={() => store.performLogin()}>{__('login')}</button>
+            &nbsp;|&nbsp;
+            <a href='javascript:void' onClick={() => store.goTo('register')}>{__('register')}</a>
+          </div>
         </div>
       </div>
     </div>
