@@ -170,6 +170,39 @@ class AuthStore {
     })
   }
 
+  @action showPwdChange(token) {
+    this.cv = observable({
+      submitted: false,
+      error: false,
+      errors: observable.map({}),
+      form: {
+        password: ''
+      }
+    })
+    this.cv.validators = {
+      password: (val) => {
+        if (val.length < 8) {
+          return __('too short')
+        }
+      }
+    }
+    this.cv.token = token
+    this._validate('password', this.cv.form.password)
+  }
+
+  @action performPwdChange() {
+    this.cv.error = null
+    this.cv.submitted = true
+    this.authService.setPwd(this.cv.form.password, this.cv.token, this.requester)
+    .then((res) => {
+      this.cv.error = 'success'
+    })
+    .catch((err) => {
+      this.cv.error = err.toString()
+      this.cv.submitted = false
+    })
+  }
+
 }
 
 export default CommentsStateInit(AuthStore)

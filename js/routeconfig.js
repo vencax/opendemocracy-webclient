@@ -5,6 +5,7 @@ import DashboardPage from './components/pages/dashboard'
 import LoginPage from './components/pages/login'
 import RegisterPage from './components/pages/register'
 import RequestPwdChangePage from './components/pages/requestpwdchange'
+import PwdChangePage from './components/pages/pwdchange'
 import ProposalPage from './components/pages/proposal'
 import ProposalEditPage from './components/pages/proposaledit'
 import ProposalListPage from './components/pages/proposallist'
@@ -29,6 +30,13 @@ const views = {
     path: '/requestpwdchange',
     component: <RequestPwdChangePage />,
     beforeEnter: (route, params, store) => store.showReqPwdChange()
+  }),
+  pwdchange: new Route({
+    path: '/pwdchange',
+    component: <PwdChangePage />,
+    onEnter: (route, params, store, queryParams) => {
+      store.showPwdChange(queryParams.sptoken)
+    }
   }),
   proposal: new Route({
     path: '/proposal/:id',
