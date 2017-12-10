@@ -51,7 +51,7 @@ const RegisterView = ({store, afterLogin}) => {
             store.cv.error === 'success' ? (
               <div>
                 <i className='fa fa-check' />&nbsp;
-                __('user created, check your mailbox for further instruction')
+                {__('user created, check your mailbox for further instruction')}
               </div>
             ) : (
               <div>{store.cv.error}</div>
