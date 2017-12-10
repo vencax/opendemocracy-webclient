@@ -70,6 +70,9 @@ module.exports = (env = {
         // }, {
           from: path.resolve('./favicon.ico'),
           to: path.resolve('./build/favicon.ico')
+        }, {
+          from: path.resolve('./bootstrap_comments.css'),
+          to: path.resolve('./build/bootstrap_comments.css')
         }
       ], {copyUnmodified: true})
     ]),
