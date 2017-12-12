@@ -8,10 +8,20 @@ const ReqPwdChangeView = ({store, afterLogin}) => {
   const onAttrChange = (attr) => (e) => {
     store.handleLoginFormChange(attr, e.target.value)
   }
+  function _successMessage () {
+    const p = store.cv.changingPwd
+      ? __('password change requested')
+      : __('verification mail resent')
+    return `${p}, ${__('see your mailbox for details')}`
+  }
 
   return (
     <div className='container'>
-      <h1>{__('request forgotten password')}</h1>
+      <h1>{
+        store.cv.changingPwd
+          ? __('request password change')
+          : __('resend verification email')
+        }</h1>
       <div className='row'>
         <div className='col-sm-12 col-md-6'>
           <div className='form-group'>
@@ -20,14 +30,29 @@ const ReqPwdChangeView = ({store, afterLogin}) => {
               onChange={onAttrChange('email')} />
           </div>
           {
-            store.cv.error ? <div><i className='fa fa-check' />&nbsp;{store.cv.error}</div> : null
+            (() => {
+              switch (store.cv.error) {
+                case 'success': return (
+                  <div><i className='fa fa-check' />&nbsp;{_successMessage()}</div>
+                )
+                case null:
+                  return null
+                default: return (
+                  <div><i className='fa fa-check' />&nbsp;{store.cv.error}</div>
+                )
+              }
+            })()
           }
-          <div>
-            <button type='submit' className='btn btn-default'
-              disabled={store.cv.submitted}
-              onClick={() => store.performReqPwdChange()}>{__('submit')}
-            </button>
-          </div>
+          {
+            store.cv.error !== 'success' && (
+              <div>
+                <button type='submit' className='btn btn-default'
+                  disabled={store.cv.submitted}
+                  onClick={() => store.performReqToken()}>{__('submit')}
+                </button>
+              </div>
+            )
+          }
         </div>
       </div>
     </div>

@@ -14,25 +14,37 @@ const LoginView = ({store, afterLogin}) => {
       <div className='row'>
         <div className='col-sm-12 col-md-6'>
           <div className='form-group'>
-            <label for='iUname'>username</label>
-            <input type='email' className='form-control' id='iUname' placeholder={__('email')}
+            <label for='iUname'>{__('username')}</label>
+            <input type='email' className='form-control' id='iUname' placeholder={__('username')}
               onChange={onAttrChange('email')} />
           </div>
           <div className='form-group'>
-            <label for='iPassword'>Password</label>
+            <label for='iPassword'>{__('password')}</label>
             <input type='password' className='form-control' id='iPassword' placeholder={__('password')}
               onChange={onAttrChange('passwd')} />
           </div>
-          {
-            store.cv.error ? (
-              <div>
-                {store.cv.error}&nbsp;|&nbsp;
-                <a href='javascript:void' onClick={() => store.goTo('requestpwdchange')}>
-                  {__('request password change')}
-                </a>
-              </div>
-            ) : null
-          }
+          {(() => {
+            switch (store.cv.error) {
+              case 'incorrect credentials': return (
+                <div>
+                  {__('incorrect credentials')}&nbsp;|&nbsp;
+                  <a href='javascript:void' onClick={() => store.goTo('requestpwdchange')}>
+                    {__('request password change')}
+                  </a>
+                </div>
+              )
+              case 'user disabled': return (
+                <div>
+                  {__('user is not verified')}&nbsp;|&nbsp;
+                  <a href='javascript:void' onClick={() => store.goTo('reqResendVerifyMail')}>
+                    {__('resend verification email')}
+                  </a>
+                </div>
+              )
+              default:
+                return null
+            }
+          })()}
           <div>
             <button type='submit' className='btn btn-default'
               disabled={store.cv.submitted}

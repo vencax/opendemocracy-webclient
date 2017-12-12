@@ -27,9 +27,14 @@ const views = {
     beforeEnter: (route, params, store) => store.showRegister()
   }),
   requestpwdchange: new Route({
-    path: '/requestpwdchange',
+    path: '/request/pwdchange',
     component: <RequestPwdChangePage />,
-    beforeEnter: (route, params, store) => store.showReqPwdChange()
+    beforeEnter: (route, params, store) => store.showReqPwdChange(true)
+  }),
+  reqResendVerifyMail: new Route({
+    path: '/request/resendverifyemail',
+    component: <RequestPwdChangePage />,
+    beforeEnter: (route, params, store) => store.showReqPwdChange(false)
   }),
   pwdchange: new Route({
     path: '/pwdchange',

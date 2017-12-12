@@ -142,30 +142,44 @@ class AuthStore {
       this.goTo('dashboard')
     })
     .catch((err) => {
-      this.cv.error = __('wrong credentials')
+      this.cv.error = err.response.data
       this.cv.submitted = false
     })
   }
 
-  @action showReqPwdChange() {
+  @action resendVerificationEmail() {
+    this.authService.resendVerificationEmail(this.cv.form, this.requester)
+    .then((res) => {
+      addMessage(__('done'))
+      this.cv.error = null
+    })
+    .catch((err) => {
+      addMessage(err.response.data)
+    })
+  }
+
+  @action showReqPwdChange(changingPwd) {
     this.cv = observable({
+      changingPwd,
       submitted: false,
-      error: false,
+      error: null,
       form: {
         email: ''
       }
     })
   }
 
-  @action performReqPwdChange() {
+  @action performReqToken() {
     this.cv.error = null
     this.cv.submitted = true
-    this.authService.requestPwdChange(this.cv.form.email, this.requester)
+    const promise = this.cv.changingPwd
+      ? this.authService.requestPwdChange(this.cv.form.email, this.requester)
+      : this.authService.requestResendVerifMail(this.cv.form.email, this.requester)
     .then((res) => {
-      this.cv.error = __('password change requested, see your mailbox for details')
+      this.cv.error = 'success'
     })
     .catch((err) => {
-      this.cv.error = __('wrong email')
+      this.cv.error = __('unrecognized email')
       this.cv.submitted = false
     })
   }

@@ -48,6 +48,13 @@ export default class AuthService {
     })
   }
 
+  requestResendVerifMail (email, requester) {
+    return requester.call(`${Conf.authUrl}/resendverification`, 'PUT', {email})
+    .then((res) => {
+      return res.data
+    })
+  }
+
   setPwd (newPwd, token, requester) {
     const url = `${Conf.authUrl}/setpasswd?sptoken=${token}`
     return requester.call(url, 'PUT', {password: newPwd})
