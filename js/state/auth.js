@@ -175,11 +175,12 @@ class AuthStore {
     const promise = this.cv.changingPwd
       ? this.authService.requestPwdChange(this.cv.form.email, this.requester)
       : this.authService.requestResendVerifMail(this.cv.form.email, this.requester)
+    promise
     .then((res) => {
       this.cv.error = 'success'
     })
     .catch((err) => {
-      this.cv.error = __('unrecognized email')
+      this.cv.error = err.response.data
       this.cv.submitted = false
     })
   }

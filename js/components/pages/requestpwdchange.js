@@ -37,6 +37,9 @@ const ReqPwdChangeView = ({store, afterLogin}) => {
                 )
                 case null:
                   return null
+                case 'user not found': return (
+                  <div><i className='fa fa-check' />&nbsp;{__('unrecognized email')}</div>
+                )
                 default: return (
                   <div><i className='fa fa-check' />&nbsp;{store.cv.error}</div>
                 )
