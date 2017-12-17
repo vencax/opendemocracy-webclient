@@ -11,6 +11,7 @@ const LoginView = ({store, afterLogin}) => {
 
   return (
     <div className='container'>
+      <h1>{__('user login')}</h1>
       <div className='row'>
         <div className='col-sm-12 col-md-6'>
           <div className='form-group'>
