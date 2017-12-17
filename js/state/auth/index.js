@@ -1,7 +1,8 @@
 import { observable, computed, toJS, action, transaction, extendObservable, asMap } from 'mobx'
 import CommentsStateInit from 'fb-like-discussions/state'
-import AuthService from '../services/auth'
-import {__} from './i18n'
+import AuthService from '../../services/auth'
+import RegisterStore from './register'
+import {__} from '../i18n'
 
 class AuthStore {
 
@@ -44,80 +45,14 @@ class AuthStore {
   }
 
   @action showRegister() {
-    this.cv = observable({
-      submitted: false,
-      error: false,
-      errors: observable.map({}),
-      form: {
-        username: '',
-        password: '',
-        name: '',
-        email: ''
-      }
+    this.cv = new RegisterStore((form) => {
+      return this.authService.register(form, this.requester)
     })
-    this.cv.validators = {
-      name: (val) => {
-        if (val.length === 0) {
-          return __('mandatory')
-        }
-        if (val.length > 64) {
-          return __('too long')
-        }
-      },
-      username: (val) => {
-        if (val.length === 0) {
-          return __('mandatory')
-        }
-        if (val.length > 64) {
-          return __('too long')
-        }
-      },
-      password: (val) => {
-        if (val.length === 0) {
-          return __('mandatory')
-        }
-        if (val.length > 64) {
-          return __('too long')
-        }
-      },
-      email: (val) => {
-        if (val.length === 0) {
-          return __('mandatory')
-        }
-        if (!val.match(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/)) {
-          return __('invalid email')
-        }
-        if (val.length > 64) {
-          return __('too long')
-        }
-      }
-    }
-    for (let v in this.cv.validators) {
-      this._validate(v, this.cv.form[v])
-    }
-  }
-
-  @action handleRegisterFormChange(attr, val) {
-    this.cv.form[attr] = val
-    this._validate(attr, val)
   }
 
   _validate(attr, val) {
     const err = this.cv.validators[attr](val)
     return err ? this.cv.errors.set(attr, err) : this.cv.errors.delete(attr)
-  }
-
-  @action performRegister() {
-    this.cv.error = null
-    this.cv.submitted = true
-    this.authService.register(this.cv.form, this.requester)
-    .then((res) => {
-      this.cv.error = 'success'
-    })
-    .catch((err) => {
-      this.cv.error = __('user already exists')
-      this.cv.submitted = false
-    })
   }
 
   @action logout() {
@@ -175,12 +110,11 @@ class AuthStore {
     const promise = this.cv.changingPwd
       ? this.authService.requestPwdChange(this.cv.form.email, this.requester)
       : this.authService.requestResendVerifMail(this.cv.form.email, this.requester)
-    promise
     .then((res) => {
       this.cv.error = 'success'
     })
     .catch((err) => {
-      this.cv.error = err.response.data
+      this.cv.error = __('unrecognized email')
       this.cv.submitted = false
     })
   }

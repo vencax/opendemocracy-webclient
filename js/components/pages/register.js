@@ -6,9 +6,9 @@ import {__} from '../../state/i18n'
 const RegisterView = ({store, afterLogin}) => {
   //
   const onAttrChange = (attr) => (e) => {
-    store.handleRegisterFormChange(attr, e.target.value)
+    store.cv.handleFormChange(attr, e.target.value)
   }
-  const errs = store.cv.errors
+  const errs = store.cv.data.errors
 
   return (
     <div className='container'>
@@ -48,21 +48,21 @@ const RegisterView = ({store, afterLogin}) => {
             }
           </div>
           {
-            store.cv.error === 'success' ? (
+            store.cv.data.error === 'success' ? (
               <div>
                 <i className='fa fa-check' />&nbsp;
                 {__('user created, check your mailbox for further instruction')}
               </div>
             ) : (
-              <div>{store.cv.error}</div>
+              <div>{store.cv.data.error}</div>
             )
           }
           {
-            store.cv.error !== 'success' && (
+            store.cv.data.error !== 'success' && (
               <div>
                 <button type='submit' className='btn btn-default'
-                  disabled={store.cv.submitted || errs.size > 0}
-                  onClick={() => store.performRegister()}>{__('submit')}</button>
+                  disabled={store.cv.data.submitted || errs.size > 0}
+                  onClick={() => store.cv.performRegister()}>{__('submit')}</button>
               </div>
             )
           }
