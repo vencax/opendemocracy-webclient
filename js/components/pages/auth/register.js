@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
-import {__} from '../../state/i18n'
+import {__} from '../../../state/i18n'
 
 const RegisterView = ({store, afterLogin}) => {
   //
