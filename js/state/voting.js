@@ -27,14 +27,14 @@ export default class VotingStore {
 
   @action onVoteSubmit() {
     this.takingaction = true
-    const method = this.myvote === undefined ? 'post' : 'put'
+    const method = this.myvote.id === undefined ? 'post' : 'put'
     this.requester.call(`/proposals/${this.proposal.id}/casts`, method, this.myvote)
     .then(this.onVoteSubmitted.bind(this))
     .catch(this.onError)
   }
 
   @action onVoteSubmitted(res) {
-    this.myvote = res.data[0]
+    this.myvote = res.data.length ? res.data[0] : res.data
     this.takingaction = false
   }
 }
