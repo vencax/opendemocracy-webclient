@@ -72,6 +72,7 @@ class ProposalStore extends AuthStore {
     this.cv = observable({
       loading: adding ? false : true,
       record: adding ? {
+        typ: 'proposal',
         title: '',
         content: '',
         tags: ''
@@ -193,7 +194,7 @@ class ProposalStore extends AuthStore {
   }
 
   _validate(attr, val) {
-    const err = this.cv.validators[attr](val)
+    const err = this.cv.validators[attr] ? this.cv.validators[attr](val) : null
     return err ? this.cv.errors.set(attr, err) : this.cv.errors.delete(attr)
   }
 

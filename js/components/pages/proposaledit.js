@@ -17,6 +17,16 @@ const ProposalForm = observer(({rec, errors, handleChange}) => {
   const tagOptions = ['zakony', 'neco', 'neco2']
   return (
     <div className='col-sm-12 col-md-6'>
+
+      <FormGroup controlId='typ'>
+        <ControlLabel>{__('type')}</ControlLabel>
+        <FormControl componentClass='select' name='typ' disabled={rec.id}
+          onChange={(e) => handleChange('typ', e.target.value)} value={rec.title}>
+          <option key={1} value='proposal'>{__('proposal')}</option>
+          <option key={2} value='eventdate'>{__('event date')}</option>
+        </FormControl>
+      </FormGroup>
+
       <FormGroup controlId='title' validationState={validationState('title')}>
         <ControlLabel>{__('title')}</ControlLabel>
         <FormControl componentClass='input' name='title'
