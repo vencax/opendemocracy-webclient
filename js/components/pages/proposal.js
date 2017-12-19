@@ -10,9 +10,28 @@ import {__} from '../../state/i18n'
 
 const _formatDate = (d) => moment(d).format('HH:mm DD.MM.YYYY')
 
+const ToolBar = ({proposal, enabled, onFeedbackClick}) => {
+  switch (proposal.status) {
+    case 'discussing':
+      return enabled ? (
+        <button className='btn btn-sm' onClick={onFeedbackClick}>
+          {proposal.feedback === null ? __('support') : __('not support anymore')}
+        </button>
+      ) : null
+    case 'thinking':
+      return <span>{__('voting begins at')}: {_formatDate(proposal.votingbegins)}</span>
+    case 'voting':
+      return <span>{__('voting ends at')}: {_formatDate(proposal.votingends)}</span>
+    case 'locked':
+      return <span>{__('voting ended at')}: {_formatDate(proposal.votingends)}</span>
+    default:
+      return null
+  }
+}
+
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
-  const enabled = proposal && store.loggedUser !== null && proposal.status === 'discussing'
+  const enabled = proposal && store.loggedUser !== null
 
   const DefaultGravatar = observer(({user}) => {
     const uinfo = store.userinfos.get(user)
@@ -39,23 +58,8 @@ const DiscussionView = ({store}) => {
       </div>
       <div className='row'>
         <div className='col-sm-12 col-md-6'>
-          {
-            proposal.status === 'discussing' && enabled ? (
-              <button className='btn btn-sm' onClick={() => store.addProposalFeedback()}>
-                {proposal.feedback === null ? __('support') : __('not support anymore')}
-              </button>
-            ) : (
-              proposal.status === 'thinking' ? (
-                <span>{__('voting begins at')}: {_formatDate(proposal.votingbegins)}</span>
-              ) : (
-                proposal.status === 'voting' ? (
-                  <span>{__('voting ends at')}: {_formatDate(proposal.votingends)}</span>
-                ) : proposal.status === 'locked' ? (
-                  <span>{__('voting ended at')}: {_formatDate(proposal.votingends)}</span>
-                ) : null
-              )
-            )
-          }
+          <ToolBar proposal={proposal} enabled={enabled}
+            onFeedbackClick={() => store.addProposalFeedback()} />
           <p dangerouslySetInnerHTML={{__html: proposal.content}} />
         </div>
         <div className='col-sm-12 col-md-6'>
@@ -67,7 +71,7 @@ const DiscussionView = ({store}) => {
               </div>
             ) : (
               <VoteForm store={store.cv.votingStore}
-                enabled={store.loggedUser !== null && proposal.status === 'voting'} />
+                enabled={enabled && proposal.status === 'voting'} />
             )
           }
         </div>
@@ -83,7 +87,8 @@ const DiscussionView = ({store}) => {
         onLoadReplies={(comment, page = 1) => store.loadReplies(store.cv, comment, page)}
         onReply={store.onReply.bind(store)}
         Gravatar={DefaultGravatar} Heading={DefaultHeading}
-        enabled={enabled} feedbackable={store.loggedUser !== null}
+        enabled={enabled && proposal.status === 'discussing'}
+        feedbackable={store.loggedUser !== null}
         formatDate={_formatDate} __={__}
       />
     </div>

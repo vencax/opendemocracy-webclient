@@ -56,6 +56,6 @@ export default {
   "verification mail resent": "verification mail resent",
   "vote": "zavolit",
   "voting begins at": "hlasování začne v",
-  "voting ended at": "hlasování skončí v",
-  "voting ends at": "hlasování skončilo v"
+  "voting ended at": "hlasování skončilo v",
+  "voting ends at": "hlasování skončí v"
 }
