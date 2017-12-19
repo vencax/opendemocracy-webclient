@@ -7,7 +7,7 @@ import {
 import {Typeahead} from 'react-bootstrap-typeahead'
 import {__} from '../../state/i18n'
 
-const ProposalForm = observer(({rec, errors, handleChange}) => {
+const ProposalForm = observer(({rec, errors, handleChange, groupOpts}) => {
   function validationState (attr) {
     return errorText(attr) ? 'error' : null
   }
@@ -18,14 +18,30 @@ const ProposalForm = observer(({rec, errors, handleChange}) => {
   return (
     <div className='col-sm-12 col-md-6'>
 
-      <FormGroup controlId='typ'>
-        <ControlLabel>{__('type')}</ControlLabel>
-        <FormControl componentClass='select' name='typ' disabled={rec.id}
-          onChange={(e) => handleChange('typ', e.target.value)} value={rec.title}>
-          <option key={1} value='proposal'>{__('proposal')}</option>
-          <option key={2} value='eventdate'>{__('event date')}</option>
-        </FormControl>
-      </FormGroup>
+      <div className='row'>
+        <div className='col-sm-6'>
+          <FormGroup controlId='typ'>
+            <ControlLabel>{__('type')}</ControlLabel>
+            <FormControl componentClass='select' name='typ' disabled={rec.id}
+              onChange={(e) => handleChange('typ', e.target.value)} value={rec.title}>
+              <option key={1} value='proposal'>{__('proposal')}</option>
+              <option key={2} value='eventdate'>{__('event date')}</option>
+            </FormControl>
+          </FormGroup>
+        </div>
+        <div className='col-sm-6'>
+          <FormGroup controlId='group'>
+            <ControlLabel>{__('group')}</ControlLabel>
+            <FormControl componentClass='select' name='group'
+              onChange={(e) => handleChange('group', e.target.value)} value={rec.group}>
+              <option key={0} value={null} />
+              {
+                groupOpts.map((i, idx) => <option key={idx} value={i.value}>{i.label}</option>)
+              }
+            </FormControl>
+          </FormGroup>
+        </div>
+      </div>
 
       <FormGroup controlId='title' validationState={validationState('title')}>
         <ControlLabel>{__('title')}</ControlLabel>
@@ -129,7 +145,8 @@ const ProposalEditView = ({store}) => {
         <h1>{rec.id ? __('edit proposal') : __('add new proposal')}</h1>
         <div className='row'>
           <ProposalForm rec={rec} errors={store.cv.errors}
-            handleChange={store.handleProposalFormChange.bind(store)} />
+            handleChange={store.handleProposalFormChange.bind(store)}
+            groupOpts={store.cv.groups} />
           <div className='col-sm-12 col-md-6'>
             {optsForm}
           </div>
