@@ -6,7 +6,7 @@ import {__} from '../../../state/i18n'
 const LoginView = ({store, afterLogin}) => {
   //
   const onAttrChange = (attr) => (e) => {
-    store.handleLoginFormChange(attr, e.target.value)
+    store.cv.handleFormChange(attr, e.target.value)
   }
 
   return (
@@ -25,7 +25,7 @@ const LoginView = ({store, afterLogin}) => {
               onChange={onAttrChange('passwd')} />
           </div>
           {(() => {
-            switch (store.cv.error) {
+            switch (store.cv.data.error) {
               case 'incorrect credentials': return (
                 <div>
                   {__('incorrect credentials')}&nbsp;|&nbsp;
@@ -48,8 +48,8 @@ const LoginView = ({store, afterLogin}) => {
           })()}
           <div>
             <button type='submit' className='btn btn-default'
-              disabled={store.cv.submitted}
-              onClick={() => store.performLogin()}>{__('login')}</button>
+              disabled={store.cv.data.submitted}
+              onClick={() => store.cv.performLogin()}>{__('login')}</button>
             &nbsp;|&nbsp;
             <a href='javascript:void' onClick={() => store.goTo('register')}>{__('register')}</a>
           </div>

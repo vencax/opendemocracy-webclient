@@ -2,6 +2,7 @@ import { observable, computed, toJS, action, transaction, extendObservable, asMa
 import CommentsStateInit from 'fb-like-discussions/state'
 import AuthService from '../../services/auth'
 import RegisterStore from './register'
+import LoginStore from './login'
 import {__} from '../i18n'
 
 class AuthStore {
@@ -34,13 +35,13 @@ class AuthStore {
   }
 
   @action showLogin() {
-    this.cv = observable({
-      submitted: false,
-      error: false,
-      form: {
-        email: '',
-        passwd: ''
-      }
+    this.cv = new LoginStore((form) => {
+      return this.authService.login(form, this.requester)
+      .then((res) => {
+        this.loggedUser = observable(res.user)
+        this.token = res.token
+        this.goTo('dashboard')
+      })
     })
   }
 
@@ -60,26 +61,6 @@ class AuthStore {
     this.token = null
     this.authService.logout()
     this.goTo('login')
-  }
-
-  @action handleLoginFormChange(attr, val) {
-    this.cv.form[attr] = val
-  }
-
-  @action performLogin() {
-    this.cv.error = null
-    this.cv.submitted = true
-    this.authService.login(this.cv.form, this.requester)
-    .then((res) => {
-      this.cv.submitted = false
-      this.loggedUser = observable(res.user)
-      this.token = res.token
-      this.goTo('dashboard')
-    })
-    .catch((err) => {
-      this.cv.error = err.response.data
-      this.cv.submitted = false
-    })
   }
 
   @action resendVerificationEmail() {
