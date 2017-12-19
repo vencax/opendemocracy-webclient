@@ -3,6 +3,8 @@ import CommentsStateInit from 'fb-like-discussions/state'
 import AuthService from '../../services/auth'
 import RegisterStore from './register'
 import LoginStore from './login'
+import ReqTokenStore from './req_token'
+import ChangePwdStore from './change_pwd'
 import {__} from '../i18n'
 
 class AuthStore {
@@ -51,11 +53,6 @@ class AuthStore {
     })
   }
 
-  _validate(attr, val) {
-    const err = this.cv.validators[attr](val)
-    return err ? this.cv.errors.set(attr, err) : this.cv.errors.delete(attr)
-  }
-
   @action logout() {
     this.loggedUser = null
     this.token = null
@@ -63,73 +60,16 @@ class AuthStore {
     this.goTo('login')
   }
 
-  @action resendVerificationEmail() {
-    this.authService.resendVerificationEmail(this.cv.form, this.requester)
-    .then((res) => {
-      addMessage(__('done'))
-      this.cv.error = null
-    })
-    .catch((err) => {
-      addMessage(err.response.data)
-    })
+  showReqToken(changingPwd) {
+    const callService = changingPwd
+      ? (email) => this.authService.requestPwdChange(email, this.requester)
+      : (email) => this.authService.requestResendVerifMail(email, this.requester)
+    this.cv = new ReqTokenStore(callService, changingPwd)
   }
 
-  @action showReqPwdChange(changingPwd) {
-    this.cv = observable({
-      changingPwd,
-      submitted: false,
-      error: null,
-      form: {
-        email: ''
-      }
-    })
-  }
-
-  @action performReqToken() {
-    this.cv.error = null
-    this.cv.submitted = true
-    const promise = this.cv.changingPwd
-      ? this.authService.requestPwdChange(this.cv.form.email, this.requester)
-      : this.authService.requestResendVerifMail(this.cv.form.email, this.requester)
-    .then((res) => {
-      this.cv.error = 'success'
-    })
-    .catch((err) => {
-      this.cv.error = __('unrecognized email')
-      this.cv.submitted = false
-    })
-  }
-
-  @action showPwdChange(token) {
-    this.cv = observable({
-      submitted: false,
-      error: false,
-      errors: observable.map({}),
-      form: {
-        password: ''
-      }
-    })
-    this.cv.validators = {
-      password: (val) => {
-        if (val.length < 8) {
-          return __('too short')
-        }
-      }
-    }
-    this.cv.token = token
-    this._validate('password', this.cv.form.password)
-  }
-
-  @action performPwdChange() {
-    this.cv.error = null
-    this.cv.submitted = true
-    this.authService.setPwd(this.cv.form.password, this.cv.token, this.requester)
-    .then((res) => {
-      this.cv.error = 'success'
-    })
-    .catch((err) => {
-      this.cv.error = err.toString()
-      this.cv.submitted = false
+  showPwdChange(token) {
+    this.cv = new ChangePwdStore((password) => {
+      return this.authService.setPwd(password, token, this.requester)
     })
   }
 

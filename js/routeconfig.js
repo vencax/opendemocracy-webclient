@@ -29,12 +29,12 @@ const views = {
   requestpwdchange: new Route({
     path: '/request/pwdchange',
     component: <RequestPwdChangePage />,
-    beforeEnter: (route, params, store) => store.showReqPwdChange(true)
+    beforeEnter: (route, params, store) => store.showReqToken(true)
   }),
   reqResendVerifyMail: new Route({
     path: '/request/resendverifyemail',
     component: <RequestPwdChangePage />,
-    beforeEnter: (route, params, store) => store.showReqPwdChange(false)
+    beforeEnter: (route, params, store) => store.showReqToken(false)
   }),
   pwdchange: new Route({
     path: '/pwdchange',

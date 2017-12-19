@@ -6,9 +6,9 @@ import {__} from '../../../state/i18n'
 const PwdChangeView = ({store, afterLogin}) => {
   //
   const onAttrChange = (attr) => (e) => {
-    store.handleRegisterFormChange(attr, e.target.value)
+    store.cv.handleFormChange(attr, e.target.value)
   }
-  const errs = store.cv.errors
+  const errs = store.cv.data.errors
 
   return (
     <div className='container'>
@@ -24,10 +24,10 @@ const PwdChangeView = ({store, afterLogin}) => {
             }
           </div>
           {
-            store.cv.error ? <div><i className='fa fa-check' />&nbsp;{store.cv.error}</div> : null
+            store.cv.data.error ? <div><i className='fa fa-check' />&nbsp;{store.cv.data.error}</div> : null
           }
           {
-            store.cv.error === 'success' && (
+            store.cv.data.error === 'success' && (
               <span>
                 {__('password changed')}.
                 <a href='javascript:void' onClick={() => store.goTo('login')}>
@@ -38,8 +38,8 @@ const PwdChangeView = ({store, afterLogin}) => {
           }
           <div>
             <button type='submit' className='btn btn-default'
-              disabled={store.cv.submitted || errs.size > 0}
-              onClick={() => store.performPwdChange()}>{__('submit')}
+              disabled={store.cv.data.submitted || errs.size > 0}
+              onClick={() => store.cv.performPwdChange()}>{__('submit')}
             </button>
           </div>
         </div>
