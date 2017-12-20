@@ -242,7 +242,7 @@ class ProposalStore extends AuthStore {
   }
 
   @action onReply(comment, reply) {
-    comment.reply = reply === null ? '' : '@' + this.userinfos.get(reply.uid).fullname
+    comment.reply = reply === null ? '' : '@' + this.userinfos.get(reply.uid).name
   }
 
 }

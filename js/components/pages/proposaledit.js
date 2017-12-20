@@ -23,7 +23,7 @@ const ProposalForm = observer(({rec, errors, handleChange, groupOpts}) => {
           <FormGroup controlId='typ'>
             <ControlLabel>{__('type')}</ControlLabel>
             <FormControl componentClass='select' name='typ' disabled={rec.id}
-              onChange={(e) => handleChange('typ', e.target.value)} value={rec.title}>
+              onChange={(e) => handleChange('typ', e.target.value)} value={rec.typ}>
               <option key={1} value='proposal'>{__('proposal')}</option>
               <option key={2} value='eventdate'>{__('event date')}</option>
             </FormControl>
