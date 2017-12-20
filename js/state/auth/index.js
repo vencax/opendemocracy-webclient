@@ -14,6 +14,9 @@ class AuthStore {
     const uinfo = this.authService.getInfo()
     this.loggedUser = uinfo ? uinfo.user: null
     this.token = uinfo ? uinfo.token: null
+    if (this.loggedUser) {
+      this.startPollingNotifications()
+    }
   }
 
   getAuthHeaders() {
@@ -42,6 +45,7 @@ class AuthStore {
       .then((res) => {
         this.loggedUser = observable(res.user)
         this.token = res.token
+        this.startPollingNotifications()
         this.goTo('dashboard')
       })
     })
@@ -57,6 +61,7 @@ class AuthStore {
     this.loggedUser = null
     this.token = null
     this.authService.logout()
+    this.stopPollingNotifications()
     this.goTo('login')
   }
 

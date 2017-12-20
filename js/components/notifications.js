@@ -11,7 +11,7 @@ const Notifications = ({store}) => {
         store.notifications.map(i => {
           switch (i.evt) {
             case 'propsuport': return (
-              <MenuItem onClick={() => store.goTo('proposal', {id: i.objid})}>
+              <MenuItem onClick={() => store.onNotifClicked(i)}>
                 {i.title} {__('got enough support')}
               </MenuItem>
             )
