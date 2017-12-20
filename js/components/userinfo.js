@@ -1,12 +1,12 @@
 import React from 'react'
 import {observer} from 'mobx-react'
-import {Nav, NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
+import {NavItem, NavDropdown, MenuItem} from 'react-bootstrap'
 import {__} from '../state/i18n'
 
 const UserInfo = ({store}) => {
   //
   const u = store.loggedUser
-  const uinfo = u === null ? (
+  return u === null ? (
     <NavItem eventKey={3} onClick={() => store.goTo('login')}>
       {__('login')}
     </NavItem>
@@ -24,9 +24,6 @@ const UserInfo = ({store}) => {
         {__('logout')}
       </MenuItem>
     </NavDropdown>
-  )
-  return (
-    <Nav pullRight>{uinfo}</Nav>
   )
 }
 

@@ -1,10 +1,10 @@
 import { observable, computed, toJS, action, extendObservable } from 'mobx'
 import { RouterStore } from 'mobx-router'
-
+import NotificationStore from './notification'
 import DataRequester from '../services/requester'
-import ProposalStore from './proposal'
 
-class AppStore extends ProposalStore {
+
+class AppStore extends NotificationStore {
 
   constructor (views) {
     super()

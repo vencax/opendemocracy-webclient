@@ -3,6 +3,7 @@ import React from 'react'
 import {observer} from 'mobx-react'
 import {Navbar, Nav, NavItem} from 'react-bootstrap'
 import UserInfo from './userinfo'
+import Notifications from './notifications'
 import {__} from '../state/i18n'
 
 const AppMenu = ({store}) => {
@@ -37,7 +38,10 @@ const AppMenu = ({store}) => {
       </Navbar.Header>
       <Navbar.Collapse>
         {links}
-        <UserInfo store={store} />
+        <Nav pullRight>
+          <Notifications store={store} />
+          <UserInfo store={store} />
+        </Nav>
       </Navbar.Collapse>
     </Navbar>
   )
