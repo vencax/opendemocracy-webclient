@@ -1,4 +1,4 @@
-/* global moment */
+/* global moment marked */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
@@ -60,7 +60,7 @@ const DiscussionView = ({store}) => {
         <div className='col-sm-12 col-md-6'>
           <ToolBar proposal={proposal} enabled={enabled}
             onFeedbackClick={() => store.addProposalFeedback()} />
-          <p dangerouslySetInnerHTML={{__html: proposal.content}} />
+          <p dangerouslySetInnerHTML={{__html: marked(proposal.content)}} />
         </div>
         <div className='col-sm-12 col-md-6'>
           {
