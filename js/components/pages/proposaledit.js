@@ -1,9 +1,11 @@
+/* global moment */
 import React from 'react'
 import PropTypes from 'prop-types'
 import { observer, inject } from 'mobx-react'
 import {
   FormGroup, ControlLabel, FormControl, HelpBlock, Button
 } from 'react-bootstrap'
+import DatePicker from 'react-bootstrap-date-picker'
 import {Typeahead} from 'react-bootstrap-typeahead'
 import {__} from '../../state/i18n'
 
@@ -72,19 +74,28 @@ const ProposalForm = observer(({rec, errors, handleChange, groupinfos}) => {
   )
 })
 
-const OptionsForm = observer(({rec, errors, handleChange}) => {
+const DATEFORMAT = 'DD/MM/YYYY'
+
+const OptionsForm = observer(({rec, errors, handleChange, proposaltype}) => {
   function validationState (attr) {
     return errors.has(attr) ? 'error' : null
   }
   function errorText (attr) {
     return errors.get(attr)
   }
+  const Input = proposaltype === 'eventdate' ? (
+    <DatePicker value={rec.title ? moment(rec.title, DATEFORMAT).format() : null} onChange={(_, val) => {
+      handleChange('title', val)
+    }} dateFormat={DATEFORMAT} />
+  ) : (
+    <FormControl componentClass='input' name='title'
+      onChange={(e) => handleChange('title', e.target.value)} value={rec.title} />
+  )
   return (
     <div>
       <FormGroup controlId='title' validationState={validationState('title')}>
         <ControlLabel>{__('title')}</ControlLabel>
-        <FormControl componentClass='input' name='title'
-          onChange={(e) => handleChange('title', e.target.value)} value={rec.title} />
+        {Input}
         <FormControl.Feedback />
         {errorText ? <HelpBlock>{errorText('title')}</HelpBlock> : null}
       </FormGroup>
@@ -134,7 +145,8 @@ const ProposalEditView = ({store}) => {
             <div>
               <OptionsForm rec={store.cv.editedOption}
                 handleChange={store.onOptionAttrChange.bind(store)}
-                errors={store.cv.optionerrors} />
+                errors={store.cv.optionerrors}
+                proposaltype={rec.typ} />
               <Button onClick={store.saveOption.bind(store)} disabled={!store.optSaveable}>{__('save')}</Button>
               <Button onClick={store.cancelEditOption.bind(store)}>{__('cancel')}</Button>
             </div>

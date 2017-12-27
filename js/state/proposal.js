@@ -85,10 +85,10 @@ class ProposalStore extends AuthStore {
     })
     this.cv.optsvalidators = {
       title: (val) => {
-        if (val.length === 0) {
+        if (!val || val.length === 0) {
           return __('mandatory')
         }
-        if (val.length > 64) {
+        if (val && val.length > 64) {
           return __('too long')
         }
       },
