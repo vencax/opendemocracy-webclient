@@ -7,7 +7,7 @@ import {
 import {Typeahead} from 'react-bootstrap-typeahead'
 import {__} from '../../state/i18n'
 
-const ProposalForm = observer(({rec, errors, handleChange, groupOpts}) => {
+const ProposalForm = observer(({rec, errors, handleChange, groupinfos}) => {
   function validationState (attr) {
     return errorText(attr) ? 'error' : null
   }
@@ -15,6 +15,11 @@ const ProposalForm = observer(({rec, errors, handleChange, groupOpts}) => {
     return errors.get(attr)
   }
   const tagOptions = ['zakony', 'neco', 'neco2']
+  const groupOptions = []
+  groupinfos.forEach((i, id) => {
+    groupOptions.push(<option key={id} value={id}>{i}</option>)
+  })
+
   return (
     <div className='col-sm-12 col-md-6'>
 
@@ -35,9 +40,7 @@ const ProposalForm = observer(({rec, errors, handleChange, groupOpts}) => {
             <FormControl componentClass='select' name='group'
               onChange={(e) => handleChange('group', e.target.value)} value={rec.group}>
               <option key={0} value={null} />
-              {
-                groupOpts.map((i, idx) => <option key={idx} value={i.value}>{i.label}</option>)
-              }
+              {groupOptions}
             </FormControl>
           </FormGroup>
         </div>
@@ -146,7 +149,7 @@ const ProposalEditView = ({store}) => {
         <div className='row'>
           <ProposalForm rec={rec} errors={store.cv.errors}
             handleChange={store.handleProposalFormChange.bind(store)}
-            groupOpts={store.cv.groups} />
+            groupinfos={store.groupinfos} />
           <div className='col-sm-12 col-md-6'>
             {optsForm}
           </div>

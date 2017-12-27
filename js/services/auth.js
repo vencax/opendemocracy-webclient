@@ -1,7 +1,6 @@
 /* global localStorage Conf md5 */
 const LSTORAGE_USER_KEY = 'opendemocracy_user'
 const LSTORAGE_TOKEN_KEY = 'opendemocracy_token'
-let groups = null
 
 export default class AuthService {
   //
@@ -35,18 +34,10 @@ export default class AuthService {
     })
   }
 
-  grouplist (groups2fill, requester) {
-    if (groups !== null) {
-      groups2fill = groups
-    } else {
-      requester.call(`${Conf.authUrl}/api/group`).then((res) => {
-        groups = res.data.map(i => ({
-          value: i.id,
-          label: i.name
-        }))
-        groups2fill.replace(groups)
-      })
-    }
+  grouplist (requester) {
+    return requester.call(`${Conf.authUrl}/api/group`).then((res) => {
+      return res.data
+    })
   }
 
   register (formdata, requester) {

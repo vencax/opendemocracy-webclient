@@ -13,7 +13,8 @@ const DiscussionsView = ({ store }) => {
               store.goToDetail(dis.id)
             }
             return <DiscussionAbbrev discussion={dis} idx={idx}
-              detailClicked={_detailClicked} userinfos={store.userinfos} />
+              detailClicked={_detailClicked}
+              userinfos={store.userinfos} groupinfos={store.groupinfos} />
           })
         }
       </ul>

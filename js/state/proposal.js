@@ -81,10 +81,8 @@ class ProposalStore extends AuthStore {
       options: [],
       optionerrors: observable.map({}),
       errors: observable.map({}),
-      editedOption: null,
-      groups: []
+      editedOption: null
     })
-    this.authService.grouplist(this.cv.groups, this.requester)  // init group options
     this.cv.optsvalidators = {
       title: (val) => {
         if (val.length === 0) {

@@ -4,7 +4,7 @@ import { observer, inject } from 'mobx-react'
 import DiscussionAbbrev from './partials/discussion_abbrev'
 import {__} from '../../state/i18n'
 
-const DashboardPage = ({store, afterLogin}) => {
+const DashboardPage = ({store}) => {
   //
   function renderProposalList (list, renderEdit = false) {
     return list ? (
@@ -19,7 +19,8 @@ const DashboardPage = ({store, afterLogin}) => {
                 <button className='btn btn-sm' onClick={() => store.goTo('proposaledit', {id: dis.id})}>{__('edit')}</button>
               ) : null
               return <DiscussionAbbrev discussion={dis} detailClicked={_detailClicked}
-                idx={idx} editButton={editButton} userinfos={store.userinfos} />
+                idx={idx} editButton={editButton}
+                userinfos={store.userinfos} groupinfos={store.groupinfos} />
             })
           }
         </div>
@@ -51,7 +52,6 @@ const DashboardPage = ({store, afterLogin}) => {
   )
 }
 DashboardPage.propTypes = {
-  store: PropTypes.object.isRequired,
-  afterLogin: PropTypes.func.isRequired
+  store: PropTypes.object.isRequired
 }
 export default inject('store')(observer(DashboardPage))

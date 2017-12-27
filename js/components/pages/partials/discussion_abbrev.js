@@ -3,9 +3,9 @@ import React from 'react'
 import { observer } from 'mobx-react'
 import {DEFAULT_AVATAR} from './consts'
 
-const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, ...rest}) => {
+const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, groupinfos, ...rest}) => {
   const user = userinfos.get(discussion.uid)
-
+  const group = groupinfos.get(discussion.group)
   return (
     <div {...rest}>
       <div className='media'>
@@ -16,10 +16,11 @@ const DiscussionAbbrev = ({discussion, detailClicked, editButton, userinfos, ...
         </div>
         <div className='media-body'>
           <h4 className='media-heading'>
-            <a href='javascript:void(0)' onClick={detailClicked}>{discussion.title}</a> { editButton } {discussion.status}
+            {(discussion.group && group) ? ` (${group}) ` : null}
+            <a href='javascript:void(0)' onClick={detailClicked}>{discussion.title}</a> {discussion.status}
           </h4>
           <p>
-            {user ? user.name : '...'} · {moment(discussion.created).format('DD.MM.YYYY')} · {discussion.comment_count} <i className='fa fa-comments' />
+            {user ? user.name : '...'} · {moment(discussion.created).format('DD.MM.YYYY')} · {discussion.comment_count} <i className='fa fa-comments' /> { editButton }
           </p>
           <p dangerouslySetInnerHTML={{__html: marked(discussion.content)}} />
         </div>

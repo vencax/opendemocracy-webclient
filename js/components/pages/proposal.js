@@ -31,7 +31,7 @@ const ToolBar = ({proposal, enabled, onFeedbackClick}) => {
 
 const DiscussionView = ({store}) => {
   const proposal = store.cv.proposal
-  const enabled = proposal && store.loggedUser !== null
+  const enabled = proposal && store.loggedUser !== null && store.isInMyGroups(proposal)
 
   const DefaultGravatar = observer(({user}) => {
     const uinfo = store.userinfos.get(user)
@@ -54,6 +54,9 @@ const DiscussionView = ({store}) => {
           proposal.tags && <span> · tags: {proposal.tags.split(',').map(i => (
             <button type='button' className='btn btn-default btn-xs'>{i}</button>
           ))}</span>
+        }
+        {
+          proposal.group && <span> · {__('group')}: {store.groupinfos.get(proposal.group)}</span>
         }
       </div>
       <div className='row'>

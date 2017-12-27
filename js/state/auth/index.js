@@ -1,5 +1,6 @@
 import { observable, computed, toJS, action, transaction, extendObservable, asMap } from 'mobx'
 import CommentsStateInit from 'fb-like-discussions/state'
+import DataRequester from '../../services/requester'
 import AuthService from '../../services/auth'
 import RegisterStore from './register'
 import LoginStore from './login'
@@ -10,6 +11,10 @@ import {__} from '../i18n'
 class AuthStore {
 
   constructor() {
+    // create requester
+    const getAuthHeaders = this.getAuthHeaders.bind(this)
+    this.requester = new DataRequester(Conf.apiUrl, getAuthHeaders, {})
+
     this.authService = new AuthService()
     const uinfo = this.authService.getInfo()
     this.loggedUser = uinfo ? uinfo.user: null
@@ -17,6 +22,9 @@ class AuthStore {
     if (this.loggedUser) {
       this.startPollingNotifications()
     }
+    this.authService.grouplist(this.requester)
+    .then(this.onGroupsLoaded.bind(this))
+    .catch(err => {})
   }
 
   getAuthHeaders() {
@@ -25,8 +33,14 @@ class AuthStore {
     } : {}
   }
 
+  isInMyGroups(i) {
+    return !i.group || this.loggedUser.groups.indexOf(i.group) >= 0
+  }
+
   @observable userinfos = new Map()
   _ladingInfos = {}
+
+  @observable groupinfos = new Map()
 
   @action loadUserInfo(uid) {
     if (!(uid in this._ladingInfos)) {
@@ -37,6 +51,12 @@ class AuthStore {
       })
     }
     return this._ladingInfos[uid]
+  }
+
+  @action onGroupsLoaded(groups) {
+    groups.map(i => {
+      this.groupinfos.set(i.id, i.name)
+    })
   }
 
   @action showLogin() {
