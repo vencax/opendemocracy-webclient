@@ -31,11 +31,13 @@ const DashboardPage = ({store}) => {
   return (
     <div className='container'>
       <div className='row'>
-        <div className='col-xs-6'>
+        <div className='col-md-6 col-xs-12'>
           <h3>{__('open votings')}</h3>
           {renderProposalList(store.cv.ready4voting)}
         </div>
-        <div className='col-xs-6'>
+        <div className='col-md-6 col-xs-12'>
+          <h3>{__('proposals with support')}</h3>
+          {renderProposalList(store.cv.justsupported)}
           {
             store.loggedUser !== null ? (
               <div>
@@ -44,8 +46,6 @@ const DashboardPage = ({store}) => {
               </div>
             ) : null
           }
-          <h3>{__('proposals with support')}</h3>
-          {renderProposalList(store.cv.justsupported)}
         </div>
       </div>
     </div>
