@@ -38,6 +38,9 @@ class NotificationStore extends ProposalStore {
       case 'propsuport':
         this.goTo('proposal', {id: notif.objid}, {_page: 1})
         break
+      case 'newvoting':
+        this.goTo('proposal', {id: notif.objid}, {_page: 1})
+        break
     }
   }
 

@@ -12,7 +12,12 @@ const Notifications = ({store}) => {
           switch (i.evt) {
             case 'propsuport': return (
               <MenuItem onClick={() => store.onNotifClicked(i)}>
-                {i.title} {__('got enough support')}
+                {__('got enough support')}: {i.title}
+              </MenuItem>
+            )
+            case 'newvoting': return (
+              <MenuItem onClick={() => store.onNotifClicked(i)}>
+                {__('new voting started')}: {i.title}
               </MenuItem>
             )
           }
