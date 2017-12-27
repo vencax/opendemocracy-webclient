@@ -31,15 +31,11 @@
     "babel-preset-stage-0": "^6.5.0",
     "fb-like-discussions": "github:vencax/fb-like-discussions",
     "html-webpack-plugin": "^2.22.0",
-    "mobx": "^2.3.7",
-    "mobx-react": "^3.5.1",
     "mobx-router": "github:vencax/mobx-router",
     "prop-types": "^15.5.10",
-    "react": "^15.2.1",
     "react-bootstrap": "^0.30.10",
     "react-bootstrap-date-picker": "^3.9.0",
     "react-bootstrap-typeahead": "^2.0.0",
-    "react-dom": "^15.3.0",
     "slugify": "^1.1.0"
   },
   "devDependencies": {
